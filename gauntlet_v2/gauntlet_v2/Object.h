@@ -20,6 +20,10 @@
 #include "C_CollidableTest.h"
 #include "C_Camera.h"
 #include "C_PathFinding.h"
+#include "C_RaycastTest.h"
+#include "C_MovementBehavior.h"
+#include "C_Seperation.h"
+#include "C_BehaviorApplier.h"
 
 class Object
 {
@@ -119,12 +123,60 @@ public:
 		return components;
 	};
 
+	//static:
+	static void Add(std::shared_ptr<Object> object);
+	static std::vector<std::shared_ptr<Object>> GetObjectsWithTag(const std::string& tag);
+	static void ProcessNewObjects();
+	static std::vector<std::shared_ptr<Object>> GetNewObjects();
+	static void UpdateAll(float deltaTime);
+	static void LateUpdateAll(float deltaTime);
+	static void DrawAll(sf::RenderWindow& window, float deltaTime);
+	static bool ProcessRemovals();
+
 public:
 	//TODO change to const getter method?
 	std::shared_ptr<C_Transform> m_transform;
 	std::shared_ptr<C_InstanceID> m_instanceID;
 	std::shared_ptr<C_Tag> m_tag;
 	SharedContext& m_context;
+
+private:
+	struct by_draw_order
+	{
+		bool operator()(std::shared_ptr<Object> &a, std::shared_ptr<Object> &b)
+		{
+			auto sprite1 = a->GetComponent<C_Drawable>();
+			auto sprite2 = b->GetComponent<C_Drawable>();
+
+			if (!sprite1 && !sprite2)
+			{
+				return false;
+			}
+
+			if (sprite1 && !sprite2)
+			{
+				return false;
+			}
+
+			if (!sprite1 && sprite2)
+			{
+				return true;
+			}
+
+			if (sprite1->GetSortOrder() == sprite2->GetSortOrder())
+			{
+				return false;
+			}
+			else if (sprite1->GetSortOrder() < sprite2->GetSortOrder())
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	};
 
 private:
 	std::vector<std::shared_ptr<Component>> m_components;
@@ -135,4 +187,9 @@ private:
 	std::vector<std::shared_ptr<C_Collidable>> m_collidables;
 
 	bool m_queuedForRemoval;
+
+	//static:
+	// Do not add directly to m_objects. Add to m_newObjects instead and they are moved over at frame end.
+	static std::vector<std::shared_ptr<Object>> m_newObjects;
+	static std::vector<std::shared_ptr<Object>> m_objects;
 };

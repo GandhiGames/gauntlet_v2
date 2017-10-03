@@ -6,8 +6,6 @@ m_level(m_stateManager->m_context), m_pathFinder(m_level)
 {
 	auto context = m_stateManager->m_context;
 
-	context->m_objects = &m_objects;
-	context->m_newObjects = &m_newObjects;
 	context->m_level = &m_level;
 	context->m_player = &m_player;
 	context->m_pathFinder = &m_pathFinder;
@@ -34,7 +32,7 @@ void S_Game::OnCreate()
 	m_player->m_transform->SetPosition(m_level.GetSpawnLocation());
 	m_player->GetComponent<C_Tag>()->Set(PLAYER_TAG);
 
-	m_player->AddComponent<C_Movement>();
+	m_player->AddComponent<C_Velocity>();
 	m_player->AddComponent<C_KeyboardController>();
 
 	std::string className = "archer";
@@ -64,13 +62,14 @@ void S_Game::OnCreate()
 	obj1Sprite->SetOrigin(sf::Vector2f(13.f, 18.f));
 
 	m_player->AddComponent<C_CollidableTest>();
+	m_player->AddComponent<C_RaycastTest>();
 
 	m_player->AddComponent<C_Camera>();
 
-	m_newObjects.push_back(m_player);
+	Object::Add(m_player);
 	//Player setup end.
 
-	for (int i = 0; i < 250; ++i)
+	for (int i = 0; i < 30; ++i)
 	{
 		auto follower = std::make_shared<Object>(*m_stateManager->m_context);
 
@@ -85,14 +84,17 @@ void S_Game::OnCreate()
 		auto collider2 = follower->AddComponent<C_BoxCollider>();
 		collider2->SetCollidable(sf::FloatRect(objSprite->GetSprite().getGlobalBounds()));
 		collider2->SetLayer(CollisionLayer::Followers);
-		collider2->SetTrigger(true);
+		collider2->SetTrigger(false);
 
-		follower->AddComponent<C_Movement>();
+		follower->AddComponent<C_Velocity>();
 		follower->AddComponent<C_Pathfinding>();
 		auto followerAnim = follower->AddComponent<C_DirectionalAnimation>();
 		followerAnim->SetTextures(textureIDs);
 
-		m_newObjects.push_back(follower);
+		//follower->AddComponent<C_Seperation>();
+		//follower->AddComponent<C_BehaviorApplier>();
+
+		Object::Add(follower);
 	}
 }
 
@@ -109,10 +111,7 @@ void S_Game::Update(float deltaTime)
 {
 	m_collisions.Resolve();
 
-	for (const auto& obj : m_objects)
-	{
-		obj->Update(deltaTime);
-	}
+	Object::UpdateAll(deltaTime);
 }
 
 void S_Game::Draw(float deltaTime)
@@ -121,58 +120,26 @@ void S_Game::Draw(float deltaTime)
 
 	m_level.Draw(*window, deltaTime);
 
-	for (const auto& obj : m_objects)
-	{
-		obj->Draw(*window, deltaTime);
-	}
+	Object::DrawAll(*window, deltaTime);
+
+	Debug::Draw(*window);
 }
 
 void S_Game::LateUpdate(float deltaTime)
 {
-	for (const auto& obj : m_objects)
-	{
-		obj->LateUpdate(deltaTime);
-	}
+	Object::LateUpdateAll(deltaTime);
 
-	//Process removals;
-	bool objRemoved = false;
-	auto objIterator = m_objects.begin();
-	while (objIterator != m_objects.end())
-	{
-		auto obj = **objIterator;
+	bool removed = Object::ProcessRemovals();
 
-		bool remove = obj.IsQueuedForRemoval();
-
-		if (remove)
-		{
-			objRemoved = true;
-			objIterator = m_objects.erase(objIterator);
-		}
-		else
-		{
-			++objIterator;
-		}
-	}
-
-	if (objRemoved)
+	if (removed)
 	{
 		m_collisions.ProcessRemovals();
 	}
 
-	// Move newly created objects to global list.
-	if (m_newObjects.size() > 0)
-	{
-		m_collisions.UpdateCollidables(m_newObjects);
+	// has to be processed before Object::ProcessNewObjects.
+	m_collisions.ProcessNewObjects();
 
-		for (auto& obj : m_newObjects)
-		{
-			m_objects.push_back(obj);
-		}
-		m_newObjects.clear();
-
-		// Sort them so they are drawn in correct order.
-		std::sort(m_objects.begin(), m_objects.end(), by_draw_order());
-	}
-
-	m_pathFinder.ResetExecutionCount();
+	Object::ProcessNewObjects();
 }
+
+

@@ -22,6 +22,7 @@ public:
 	*/
 	void SetPosition(sf::Vector2f position);
 
+	//TODO: should we clamp values so they do not enter tiles.
 	void SetPosition(float x, float y);
 
 	void SetX(float x);

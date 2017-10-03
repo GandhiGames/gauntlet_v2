@@ -7,7 +7,7 @@ C_DirectionalAnimation::C_DirectionalAnimation(Object* owner) : Component(owner)
 m_currentTextureIndex(static_cast<int>(ANIMATION_STATE::WALK_DOWN))
 {
 	m_sprite = owner->GetComponent<C_AnimatedSprite>();
-	m_movement = owner->GetComponent<C_Movement>();
+	m_movement = owner->GetComponent<C_Velocity>();
 }
 
 
@@ -31,7 +31,7 @@ void C_DirectionalAnimation::Update(float deltaTime)
 {
 	ANIMATION_STATE animState = static_cast<ANIMATION_STATE>(m_currentTextureIndex);
 
-	const sf::Vector2f& velocity = m_movement->GetVelocity();
+	const sf::Vector2f& velocity = m_movement->Get();
 
 	if ((velocity.x != 0) || (velocity.y != 0))
 	{

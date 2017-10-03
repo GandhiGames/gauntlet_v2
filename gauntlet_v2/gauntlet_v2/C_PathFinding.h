@@ -2,7 +2,8 @@
 
 #include "C_Updateable.h"
 #include "C_Transform.h"
-#include "C_Movement.h"
+#include "C_Velocity.h"
+#include "Raycast.h"
 
 class C_Pathfinding : public Component, public C_Updateable
 {
@@ -17,19 +18,13 @@ public:
 private:
 	sf::Vector2f* GetNextPosition();
 
+	sf::Vector2f* GetNextReactivePosition(SharedContext& context, const sf::Vector2f& pos);
+
 	void RemoveFirst();
 
-	//TODO: move to Util class
-	/**
-	* Calculates the distance between two points
-	* @param position1 The position of the first point.
-	* @param position2 The position of the second item.
-	* @return The distance between the two points.
-	*/
-	float DistanceBetweenPoints(const sf::Vector2f& position1, const sf::Vector2f& position2)
-	{
-		return (abs(sqrt(((position1.x - position2.x) * (position1.x - position2.x)) + ((position1.y - position2.y) * (position1.y - position2.y)))));
-	}
+	bool FindLocalPath(const sf::Vector2f& pos, const sf::Vector2f& playerPos);
+
+	bool FindStraightPath(SharedContext& context, const sf::Vector2f& from, const sf::Vector2f& to);
 
 	/**
 	* The target position of the enemy.
@@ -37,8 +32,7 @@ private:
 	std::vector<sf::Vector2f> m_targetPositions;
 
 private:
-	std::shared_ptr<C_Movement> m_movement;
-
+	std::shared_ptr<C_Velocity> m_movement;
 
 	/**
 	* The current target of the enemy.

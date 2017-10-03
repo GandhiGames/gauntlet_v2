@@ -1,7 +1,7 @@
 #include "Game.h"
 
 
-Game::Game() : m_window(sf::VideoMode::getDesktopMode(), "Gauntlet_v0.1", sf::Style::Fullscreen),
+Game::Game() : m_window(sf::VideoMode::getDesktopMode(), "Gauntlet_v0.1", sf::Style::Titlebar),
 m_isRunning(true), m_stateManager(&m_context)
 {
 	// Set a random seed.
@@ -9,6 +9,8 @@ m_isRunning(true), m_stateManager(&m_context)
 
 	m_window.setVerticalSyncEnabled(true);
 	m_window.setMouseCursorVisible(false);
+	m_window.setFramerateLimit(60);
+
 
 	m_elapsed = m_clock.restart().asSeconds();
 

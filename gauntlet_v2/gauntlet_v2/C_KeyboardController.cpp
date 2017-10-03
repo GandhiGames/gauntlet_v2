@@ -7,7 +7,7 @@ C_KeyboardController::C_KeyboardController(Object* owner) : Component(owner)
 {
 	m_speed = 200;
 
-	m_movement = owner->GetComponent<C_Movement>();
+	m_movement = owner->GetComponent<C_Velocity>();
 }
 
 
@@ -59,7 +59,7 @@ void C_KeyboardController::Update(float timeDelta)
 	}
 
 
-	m_movement->SetVelocity(movementSpeed);
+	m_movement->Set(movementSpeed);
 }
 
 

@@ -1,17 +1,17 @@
-#include "C_Movement.h"
+#include "C_Velocity.h"
 #include "Object.h"
 
-C_Movement::C_Movement(Object* owner) : Component(owner),
+C_Velocity::C_Velocity(Object* owner) : Component(owner),
 m_velocity({ 0.f, 0.f })
 {
 }
 
 
-C_Movement::~C_Movement()
+C_Velocity::~C_Velocity()
 {
 }
 
-void C_Movement::Update(float timeDelta)
+void C_Velocity::Update(float timeDelta)
 {
 	if (abs(m_velocity.x) > 0.f || abs(m_velocity.y) > 0.f)
 	{
@@ -21,12 +21,12 @@ void C_Movement::Update(float timeDelta)
 	}
 }
 
-void C_Movement::SetVelocity(const sf::Vector2f& velocity)
+void C_Velocity::Set(const sf::Vector2f& velocity)
 {
 	m_velocity = velocity;
 }
 
-const sf::Vector2f& C_Movement::GetVelocity() const
+const sf::Vector2f& C_Velocity::Get() const
 {
 	return m_velocity;
 }

@@ -13,8 +13,6 @@ public:
 
 	std::vector<sf::Vector2f> GetPath(const sf::Vector2f& from, const sf::Vector2f& to);
 
-	void ResetExecutionCount();
-
 	bool IsCached(const sf::Vector2f& from, const sf::Vector2f& to);
 
 private:

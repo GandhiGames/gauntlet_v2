@@ -8,10 +8,9 @@
 class SharedContext
 {
 	friend class PathFinder;
+	friend class S_Game;
 public:
 	sf::RenderWindow* m_window;
-	std::vector<std::shared_ptr<Object>>* m_objects;
-	std::vector<std::shared_ptr<Object>>* m_newObjects;
 	Level* m_level;
 	std::shared_ptr<Object>* m_player;
 	PathFinder* m_pathFinder;

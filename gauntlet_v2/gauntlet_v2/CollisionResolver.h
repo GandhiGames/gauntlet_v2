@@ -12,7 +12,7 @@ public:
 	CollisionResolver();
 	~CollisionResolver();
 
-	void UpdateCollidables(std::vector<std::shared_ptr<Object>>& objects);
+	void ProcessNewObjects();
 	void Resolve();
 
 	std::map<CollisionLayer, Bitmask> COLLISION_LAYERS;

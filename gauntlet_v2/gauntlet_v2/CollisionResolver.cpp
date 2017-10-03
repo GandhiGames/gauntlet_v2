@@ -2,8 +2,8 @@
 
 CollisionResolver::CollisionResolver()
 {
-	COLLISION_LAYERS.insert(std::make_pair(CollisionLayer::Default, Bitmask(3)));
-	COLLISION_LAYERS.insert(std::make_pair(CollisionLayer::Player, Bitmask(5)));
+	COLLISION_LAYERS.insert(std::make_pair(CollisionLayer::Default, Bitmask(0)));
+	COLLISION_LAYERS.insert(std::make_pair(CollisionLayer::Player, Bitmask(0)));
 	COLLISION_LAYERS.insert(std::make_pair(CollisionLayer::Followers, Bitmask(0)));
 
 	/*
@@ -49,8 +49,15 @@ void CollisionResolver::ProcessRemovals()
 	}
 }
 
-void CollisionResolver::UpdateCollidables(std::vector<std::shared_ptr<Object>>& objects)
+void CollisionResolver::ProcessNewObjects()
 {
+	auto objects = Object::GetNewObjects();
+
+	if (objects.size() == 0)
+	{
+		return;
+	}
+
 	for (auto& obj : objects)
 	{
 		auto collider = obj->GetComponent<C_Collider2D>();
@@ -122,6 +129,11 @@ void CollisionResolver::ProcessCollisions(std::vector<std::shared_ptr<Object>>& 
 
 		for (auto itr2 = second.begin(); itr2 != second.end(); ++itr2)
 		{
+			if ((*itr)->m_instanceID->Get() == (*itr2)->m_instanceID->Get())
+			{
+				continue;
+			}
+
 			auto collider2 = (*itr2)->GetComponent<C_BoxCollider>();
 			auto collidable2 = collider2->GetCollidable();
 
@@ -186,8 +198,44 @@ void CollisionResolver::ProcessCollisions(std::vector<std::shared_ptr<Object>>& 
 							resolve = -((collidable1.left + collidable1.width) - collidable2.left);
 						}
 
-						auto transform = (*itr)->m_transform;
-						transform->SetPosition(transform->GetPosition() + sf::Vector2f(resolve, 0.f));
+						// The transform with the largest velocity's position is resolved.
+						auto move1 = (*itr)->GetComponent<C_Velocity>();
+						auto move2 = (*itr2)->GetComponent<C_Velocity>();
+						
+						if (move1 == nullptr && move2)
+						{
+							auto transform = (*itr2)->m_transform;
+							transform->SetPosition(transform->GetPosition() + sf::Vector2f(resolve, 0.f));
+						}
+						else if (move2 == nullptr && move1)
+						{
+							auto transform = (*itr)->m_transform;
+							transform->SetPosition(transform->GetPosition() + sf::Vector2f(resolve, 0.f));
+						}
+						else if (move1 && move2)
+						{
+							float vel1 = move1->Get().x + move1->Get().y;
+							float vel2 = move2->Get().x + move2->Get().y;
+
+							if (vel1 > vel2)
+							{
+								auto transform = (*itr)->m_transform;
+								transform->SetPosition(transform->GetPosition() + sf::Vector2f(resolve, 0.f));
+							}
+							else
+							{
+								auto transform = (*itr2)->m_transform;
+								transform->SetPosition(transform->GetPosition() + sf::Vector2f(resolve, 0.f));
+							}
+						}
+						else // move1 and move2 are nulptr, so then how did they collide if they're both static?
+						{
+							printf("CollisionResolver: Two objects collided without movement");
+							auto transform = (*itr)->m_transform;
+							transform->SetPosition(transform->GetPosition() + sf::Vector2f(resolve, 0.f));
+						}
+
+					
 					}
 					else {
 						if (yDiff > 0)

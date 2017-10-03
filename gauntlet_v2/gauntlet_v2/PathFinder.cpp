@@ -47,6 +47,7 @@ std::vector<sf::Vector2f> PathFinder::GetPath(const sf::Vector2f& from, const sf
 
 	// TODO: not great implementation as time dependent. Limits executions per frame rather than being time-independent.
 	/*
+	execution count no longer reset, implement time dependance (reset after 1 sec)
 	if (m_max >= 0)
 	{
 		if (++m_currentExecutions > m_max)
@@ -218,9 +219,4 @@ bool PathFinder::IsCached(const sf::Vector2f& from, const sf::Vector2f& to)
 	auto key = std::make_pair(startNode, goalNode);
 	auto cached = m_cached.find(key);
 	return (cached != m_cached.end());
-}
-
-void PathFinder::ResetExecutionCount()
-{
-	m_currentExecutions = 0;
 }

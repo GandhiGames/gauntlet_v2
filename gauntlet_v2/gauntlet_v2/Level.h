@@ -4,9 +4,9 @@
 // Constants for the game grid size.
 static int const GRID_WIDTH = 37;
 static int const GRID_HEIGHT = 21;
-static int const ROOM_WIDTH_MAX = 3;
-static int const ROOM_HEIGHT_MAX = 2;
-static int const ROOM_COUNT_MAX = 20;
+static int const ROOM_WIDTH_MAX = 7;
+static int const ROOM_HEIGHT_MAX = 7;
+static int const ROOM_COUNT_MAX = 30;
 
 // The width and height of each tile in pixels.
 static int const TILE_SIZE = 50;
@@ -76,6 +76,7 @@ public:
 	* @return True if the given tile is solid.
 	*/
 	bool IsSolid(int columnIndex, int rowIndex);
+	bool IsSolid(sf::Vector2f pos);
 
 	/**
 	* Sets the index of a given tile in the 2D game grid.

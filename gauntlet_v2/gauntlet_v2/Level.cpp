@@ -97,7 +97,32 @@ bool Level::IsSolid(int i, int j)
 		return (((tileIndex != static_cast<int>(TILE::FLOOR)) && (tileIndex != static_cast<int>(TILE::FLOOR_ALT))) && (tileIndex != static_cast<int>(TILE::WALL_DOOR_UNLOCKED)));
 	}
 	else
+	{
 		return false;
+	}
+}
+
+bool Level::IsSolid(sf::Vector2f pos)
+{
+	// Convert the position to relative to the level grid.
+	pos.x -= m_origin.x;
+	pos.y -= m_origin.y;
+
+	// Convert to a tile position.
+	int tileColumn, tileRow;
+
+	tileColumn = static_cast<int>(pos.x) / TILE_SIZE;
+	tileRow = static_cast<int>(pos.y) / TILE_SIZE;
+
+	if (TileIsValid(tileColumn, tileRow))
+	{
+		int tileIndex = static_cast<int>(m_grid[tileColumn][tileRow].type);
+		return (((tileIndex != static_cast<int>(TILE::FLOOR)) && (tileIndex != static_cast<int>(TILE::FLOOR_ALT))) && (tileIndex != static_cast<int>(TILE::WALL_DOOR_UNLOCKED)));
+	}
+	else
+	{
+		return false;
+	}
 }
 
 // Returns the position of the level relative to the application window.

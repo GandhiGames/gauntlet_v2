@@ -49,6 +49,24 @@
     <Filter Include="Header Files\Level Generation">
       <UniqueIdentifier>{efe66a9c-4b84-415a-ac2b-4e72168d9ade}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Raycast">
+      <UniqueIdentifier>{bb879a03-5be5-4d44-943d-47ef95d0671a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Raycast">
+      <UniqueIdentifier>{0073338d-e5e1-42f1-a4a3-1881c8ddef71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components\Test">
+      <UniqueIdentifier>{735d1e66-ead7-4ad0-89b6-e71854864116}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components\Test">
+      <UniqueIdentifier>{51de7cef-dba9-4287-a07b-2a9aad028b4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components\Movement Behavior">
+      <UniqueIdentifier>{18e5229c-5489-422e-8117-4680617c1151}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components\Movement Behavior">
+      <UniqueIdentifier>{580ac7aa-9cb6-433d-9e43-29aace64aac7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object.h">
@@ -90,9 +108,6 @@
     <ClInclude Include="C_DirectionalAnimation.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="C_Movement.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
     <ClInclude Include="S_Game.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
@@ -117,9 +132,6 @@
     <ClInclude Include="C_Collider2D.h">
       <Filter>Header Files\Components\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="C_CollidableTest.h">
-      <Filter>Header Files\Components\Collision</Filter>
-    </ClInclude>
     <ClInclude Include="C_BoxCollider.h">
       <Filter>Header Files\Components\Collision</Filter>
     </ClInclude>
@@ -140,6 +152,33 @@
     </ClInclude>
     <ClInclude Include="PathFinder.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Raycast.h">
+      <Filter>Header Files\Raycast</Filter>
+    </ClInclude>
+    <ClInclude Include="RaycastResult.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C_RaycastTest.h">
+      <Filter>Header Files\Components\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="C_CollidableTest.h">
+      <Filter>Header Files\Components\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="C_MovementBehavior.h">
+      <Filter>Header Files\Components\Movement Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="C_Seperation.h">
+      <Filter>Header Files\Components\Movement Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="C_Velocity.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="C_BehaviorApplier.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -185,9 +224,6 @@
     <ClCompile Include="TextureManager.cpp">
       <Filter>Source Files\Resource Management</Filter>
     </ClCompile>
-    <ClCompile Include="C_Movement.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
     <ClCompile Include="C_StaticSprite.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
@@ -218,8 +254,29 @@
     <ClCompile Include="PathFinder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C_CollidableTest.cpp">
+    <ClCompile Include="Raycast.cpp">
+      <Filter>Source Files\Raycast</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C_RaycastTest.cpp">
+      <Filter>Source Files\Components\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="C_CollidableTest.cpp">
+      <Filter>Source Files\Components\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="C_MovementBehavior.cpp">
+      <Filter>Source Files\Components\Movement Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="C_Seperation.cpp">
+      <Filter>Source Files\Components\Movement Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="C_Velocity.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="C_BehaviorApplier.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

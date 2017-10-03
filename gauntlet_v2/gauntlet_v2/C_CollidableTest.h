@@ -16,6 +16,6 @@ public:
 
 
 	void OnTriggerEnter(Object* owner, Object* other) override; // { printf("\n trigger enter"); };
-	void OnTriggerStay(Object* owner, Object* other) override { printf("\n trigger stay"); };
-	void OnTriggerExit(Object* owner, Object* other) override { printf("\n trigger exit"); };
+	void OnTriggerStay(Object* owner, Object* other) override { }// printf("\n trigger stay"); };
+	void OnTriggerExit(Object* owner, Object* other) override { } //printf("\n trigger exit");
 };
