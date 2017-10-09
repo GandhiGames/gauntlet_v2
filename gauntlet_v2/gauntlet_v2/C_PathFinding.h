@@ -42,5 +42,7 @@ private:
 	int m_speed;
 
 	Tile* m_prevTargetTile;
+
+	static const sf::Vector2f zeroVector;
 };
 

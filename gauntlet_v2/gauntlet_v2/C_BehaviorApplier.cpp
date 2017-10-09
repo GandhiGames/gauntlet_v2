@@ -1,7 +1,6 @@
 #include "C_BehaviorApplier.h"
 #include "Object.h"
 
-
 C_BehaviorApplier::C_BehaviorApplier(Object* owner) : Component(owner)
 {
 	m_behaviors = m_owner->GetComponents<C_MovementBehavior>();
@@ -24,10 +23,6 @@ void C_BehaviorApplier::Update(float deltaTime)
 
 	if (Mathf::sqrMagnitude(force) > 0)
 	{
-		sf::Vector2f acceleration = force / 1.f; // Mass
-
-		Mathf::truncate(acceleration, 10.f); // m_maxSpeed;
-
-		m_movement->Set(m_movement->Get() + (acceleration * deltaTime));
+		m_movement->Set(m_movement->Get() + force);
 	}
 }

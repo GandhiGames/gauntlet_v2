@@ -18,6 +18,11 @@ void C_Transform::SetPosition(float x, float y)
 	m_position.y = y;
 }
 
+void C_Transform::AddPosition(sf::Vector2f position)
+{
+	m_position += position;
+}
+
 void C_Transform::SetX(float x)
 {
 	m_position.x = x;
@@ -81,3 +86,4 @@ const std::vector<std::shared_ptr<C_Transform>>& C_Transform::GetChildren() cons
 {
 	return m_children;
 }
+

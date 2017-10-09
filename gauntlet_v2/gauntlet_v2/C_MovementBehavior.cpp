@@ -16,6 +16,8 @@ std::vector<std::shared_ptr<Object>> C_MovementBehavior::GetEntitiesInSight(floa
 {
 	auto entities = Object::GetObjectsWithTag(tag);
 
+	float radius = sightRadius * sightRadius;
+
 	std::vector<std::shared_ptr<Object>> retVals;
 
 	for(auto& obj : entities) 
@@ -24,7 +26,7 @@ std::vector<std::shared_ptr<Object>> C_MovementBehavior::GetEntitiesInSight(floa
 		{
 			float to = Mathf::sqrMagnitude(obj->m_transform->GetPosition() - m_owner->m_transform->GetPosition());
 
-			if (to < (sightRadius * sightRadius)) 
+			if (to < radius) 
 			{
 				retVals.push_back(obj);
 			}

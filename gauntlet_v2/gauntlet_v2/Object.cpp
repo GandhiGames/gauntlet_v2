@@ -38,22 +38,54 @@ void Object::Draw(sf::RenderWindow &window, float timeDelta)
 	}
 }
 
-void Object::OnCollisionEnter(Object* other)
+void Object::OnCollisionEnter(std::shared_ptr<Object> other)
 {
 	for (const auto& component : m_collidables)
 	{
-		component->OnCollisionEnter(this, other);
+		component->OnCollisionEnter(*this, other);
 	}
 }
 
-void Object::OnCollisionExit(Object* other)
+void Object::OnCollisionStay(std::shared_ptr<Object> other)
 {
 	for (const auto& component : m_collidables)
 	{
-		component->OnCollisionExit(this, other);
+		component->OnCollisionStay(*this, other);
 	}
 }
 
+void Object::OnCollisionExit(std::shared_ptr<Object> other)
+{
+	for (const auto& component : m_collidables)
+	{
+		component->OnCollisionExit(*this, other);
+	}
+}
+
+
+void Object::OnTriggerEnter(std::shared_ptr<Object> other)
+{
+	for (const auto& component : m_collidables)
+	{
+		component->OnTriggerEnter(*this, other);
+	}
+}
+
+void Object::OnTriggerStay(std::shared_ptr<Object> other)
+{
+	for (const auto& component : m_collidables)
+	{
+		component->OnTriggerStay(*this, other);
+	}
+}
+
+void Object::OnTriggerExit(std::shared_ptr<Object> other)
+{
+	for (const auto& component : m_collidables)
+	{
+		component->OnTriggerExit(*this, other);
+	}
+}
 
 void Object::Destroy()
 {
@@ -100,6 +132,11 @@ std::vector<std::shared_ptr<Object>> Object::GetObjectsWithTag(const std::string
 	}
 
 	return retObjects;
+}
+
+std::vector<std::shared_ptr<Object>>& Object::GetObjects()
+{
+	return m_objects;
 }
 
 void Object::ProcessNewObjects()

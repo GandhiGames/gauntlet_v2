@@ -3,7 +3,7 @@
 CollisionResolver::CollisionResolver()
 {
 	COLLISION_LAYERS.insert(std::make_pair(CollisionLayer::Default, Bitmask(0)));
-	COLLISION_LAYERS.insert(std::make_pair(CollisionLayer::Player, Bitmask(0)));
+	COLLISION_LAYERS.insert(std::make_pair(CollisionLayer::Player, Bitmask(4)));
 	COLLISION_LAYERS.insert(std::make_pair(CollisionLayer::Followers, Bitmask(0)));
 
 	/*
@@ -124,22 +124,25 @@ void CollisionResolver::ProcessCollisions(std::vector<std::shared_ptr<Object>>& 
 {
 	for (auto itr = first.begin(); itr != first.end(); ++itr)
 	{
-		auto collider1 = (*itr)->GetComponent<C_BoxCollider>();
-		auto collidable1 = collider1->GetCollidable();
+		auto first = (*itr);
+		auto collider1 = first->GetComponent<C_Collider2D>();
 
 		for (auto itr2 = second.begin(); itr2 != second.end(); ++itr2)
 		{
-			if ((*itr)->m_instanceID->Get() == (*itr2)->m_instanceID->Get())
+			auto second = (*itr2);
+
+			if (first->m_instanceID->Get() == second->m_instanceID->Get())
 			{
 				continue;
 			}
 
-			auto collider2 = (*itr2)->GetComponent<C_BoxCollider>();
-			auto collidable2 = collider2->GetCollidable();
+			auto collider2 = (*itr2)->GetComponent<C_Collider2D>();
 
-			if (collidable1.intersects(collidable2))
+			Manifold m = collider1->Intersects(collider2);
+
+			if (m.colliding)
 			{
-				auto emplace = m_colliding.insert(std::make_pair(collider1, collider2));
+				auto emplace = m_colliding.insert(std::make_pair(first, second));
 
 				bool wasEmplaced = emplace.second;
 
@@ -149,107 +152,24 @@ void CollisionResolver::ProcessCollisions(std::vector<std::shared_ptr<Object>>& 
 				//OnCollisionEnter
 				if (wasEmplaced)
 				{
-					auto firstCollisionListeners = (*itr)->GetComponents<C_Collidable>();
-					auto secondCollisionListeners = (*itr2)->GetComponents<C_Collidable>();
-
-					auto first = collider1->m_owner;
-					auto second = collider2->m_owner;
-
-					for (const auto& c : firstCollisionListeners)
+					if (firstIsTrigger || secondIsTrigger)
 					{
-						if (firstIsTrigger || secondIsTrigger)
-						{
-							c->OnTriggerEnter(first, second);
-						}
-						else
-						{
-							c->OnCollisionEnter(first, second);
-						}
+						first->OnTriggerEnter(second);
+						second->OnTriggerEnter(first);
 					}
-
-					for (const auto& c : secondCollisionListeners)
+					else
 					{
-						if (firstIsTrigger || secondIsTrigger)
-						{
-							c->OnTriggerEnter(second, first);
-						}
-						else
-						{
-							c->OnCollisionEnter(second, first);
-						}
+						first->OnCollisionEnter(second);
+						second->OnCollisionEnter(first);
 					}
 				}
 
 				//Prevent non-trigger colliders from intersecting
 				if (!firstIsTrigger && !secondIsTrigger)
 				{
-					float xDiff = (collidable1.left + (collidable1.width / 2)) - (collidable2.left + (collidable2.width / 2));
-					float yDiff = (collidable1.top + (collidable1.height / 2)) - (collidable2.top + (collidable2.height / 2));
-					float resolve = 0;
-
-					if (std::abs(xDiff) > std::abs(yDiff))
-					{
-						if (xDiff > 0)
-						{
-							resolve = (collidable2.left + collidable2.width) - collidable1.left;
-						}
-						else
-						{
-							resolve = -((collidable1.left + collidable1.width) - collidable2.left);
-						}
-
-						// The transform with the largest velocity's position is resolved.
-						auto move1 = (*itr)->GetComponent<C_Velocity>();
-						auto move2 = (*itr2)->GetComponent<C_Velocity>();
-						
-						if (move1 == nullptr && move2)
-						{
-							auto transform = (*itr2)->m_transform;
-							transform->SetPosition(transform->GetPosition() + sf::Vector2f(resolve, 0.f));
-						}
-						else if (move2 == nullptr && move1)
-						{
-							auto transform = (*itr)->m_transform;
-							transform->SetPosition(transform->GetPosition() + sf::Vector2f(resolve, 0.f));
-						}
-						else if (move1 && move2)
-						{
-							float vel1 = move1->Get().x + move1->Get().y;
-							float vel2 = move2->Get().x + move2->Get().y;
-
-							if (vel1 > vel2)
-							{
-								auto transform = (*itr)->m_transform;
-								transform->SetPosition(transform->GetPosition() + sf::Vector2f(resolve, 0.f));
-							}
-							else
-							{
-								auto transform = (*itr2)->m_transform;
-								transform->SetPosition(transform->GetPosition() + sf::Vector2f(resolve, 0.f));
-							}
-						}
-						else // move1 and move2 are nulptr, so then how did they collide if they're both static?
-						{
-							printf("CollisionResolver: Two objects collided without movement");
-							auto transform = (*itr)->m_transform;
-							transform->SetPosition(transform->GetPosition() + sf::Vector2f(resolve, 0.f));
-						}
-
-					
-					}
-					else {
-						if (yDiff > 0)
-						{
-							resolve = (collidable2.top + collidable2.height) - collidable1.top;
-						}
-						else
-						{
-							resolve = -((collidable1.top + collidable1.height) - collidable2.top);
-						}
-
-						auto transform = (*itr)->m_transform;
-						transform->SetPosition(transform->GetPosition() + sf::Vector2f(0.f, resolve));
-					}
+					collider1->ResolveOverlap(m);
+					m.resolve = -m.resolve;
+					collider2->ResolveOverlap(m);
 				}
 			}
 		}
@@ -264,69 +184,48 @@ void CollisionResolver::ProcessCollisionExits()
 	{
 		auto pair = *itr;
 
-		Object* first = pair.first->m_owner;
-		Object* second = pair.second->m_owner;
+		std::shared_ptr<Object> first = pair.first;
+		std::shared_ptr<Object> second = pair.second;
 
-		bool firstIsTrigger = first->GetComponent<C_Collider2D>()->IsTrigger();
-		bool secondIsTrigger = second->GetComponent<C_Collider2D>()->IsTrigger();
+		std::shared_ptr<C_Collider2D> c1 = first->GetComponent<C_Collider2D>();
+		std::shared_ptr<C_Collider2D> c2 = second->GetComponent<C_Collider2D>();
 
-		auto firstCollisionListeners = first->GetComponents<C_Collidable>();
-		auto secondCollisionListeners = second->GetComponents<C_Collidable>();
+		bool firstIsTrigger = c1->IsTrigger();
+		bool secondIsTrigger = c2->IsTrigger();
 
-		if (!pair.first->GetCollidable().intersects(pair.second->GetCollidable()))
+		Manifold m = c1->Intersects(c2);
+
+		if (!m.colliding)
 		{
 			//OnCollisionExit
-			for (const auto& c : firstCollisionListeners)
-			{
-				if (firstIsTrigger || secondIsTrigger)
-				{
-					c->OnTriggerExit(first, second);
-				}
-				else
-				{
-					c->OnCollisionExit(first, second);
-				}
-			}
 
-			for (const auto& c : secondCollisionListeners)
+			if (firstIsTrigger || secondIsTrigger)
 			{
-				if (firstIsTrigger || secondIsTrigger)
-				{
-					c->OnTriggerExit(second, first);
-				}
-				else
-				{
-					c->OnCollisionExit(second, first);
-				}
+				first->OnTriggerExit(second);
+				second->OnTriggerExit(first);
 			}
-
+			else
+			{
+				first->OnCollisionExit(second);
+				second->OnCollisionExit(first);
+			}
+	
 			itr = m_colliding.erase(itr);
 		}
 		else
 		{
 			//OnCollisionStay
-			for (const auto& c : firstCollisionListeners)
-			{
-				if (firstIsTrigger || secondIsTrigger)
-				{
-					c->OnTriggerStay(first, second);
-				}
-				else
-				{
-					c->OnCollisionStay(first, second);
-				}
-			}
 
-			for (const auto& c : secondCollisionListeners)
+			if (firstIsTrigger || secondIsTrigger)
 			{
-				if (firstIsTrigger || secondIsTrigger)
-				{
-					c->OnTriggerStay(second, first);
-				}
-				else
-				{
-					c->OnCollisionStay(second, first);
-				}
+				first->OnTriggerStay(second);
+				second->OnTriggerStay(first);
+			}
+			else
+			{
+				//TODO: if all non-trigger collisions are resolved will this ever be called?
+				first->OnCollisionStay(second);
+				second->OnCollisionStay(first);
 			}
 
 			++itr;
@@ -342,71 +241,31 @@ void CollisionResolver::ProcessCollisionExitDueToRemovals()
 	{
 		auto pair = *itr;
 
-		Object* first = pair.first->m_owner;
-		Object* second = pair.second->m_owner;
-
-		bool firstIsTrigger = first->GetComponent<C_Collider2D>()->IsTrigger();
-		bool secondIsTrigger = second->GetComponent<C_Collider2D>()->IsTrigger();
-
-		auto firstCollisionListeners = first->GetComponents<C_Collidable>();
-		auto secondCollisionListeners = second->GetComponents<C_Collidable>();
+		std::shared_ptr<Object> first = pair.first;
+		std::shared_ptr<Object> second = pair.second;
 
 		if (first->IsQueuedForRemoval() || second->IsQueuedForRemoval())
 		{
-			//OnCollisionExit
-			for (const auto& c : firstCollisionListeners)
-			{
-				if (firstIsTrigger || secondIsTrigger)
-				{
-					c->OnTriggerExit(first, second);
-				}
-				else
-				{
-					c->OnCollisionExit(first, second);
-				}
-			}
 
-			for (const auto& c : secondCollisionListeners)
+			bool firstIsTrigger = first->GetComponent<C_Collider2D>()->IsTrigger();
+			bool secondIsTrigger = second->GetComponent<C_Collider2D>()->IsTrigger();
+
+			//OnCollisionExit
+			if (firstIsTrigger || secondIsTrigger)
 			{
-				if (firstIsTrigger || secondIsTrigger)
-				{
-					c->OnTriggerExit(second, first);
-				}
-				else
-				{
-					c->OnCollisionExit(second, first);
-				}
+				first->OnTriggerExit(second);
+				second->OnTriggerExit(first);
+			}
+			else
+			{
+				first->OnCollisionExit(second);
+				second->OnCollisionExit(first);
 			}
 
 			itr = m_colliding.erase(itr);
 		}
 		else
 		{
-			//OnCollisionStay
-			for (const auto& c : firstCollisionListeners)
-			{
-				if (firstIsTrigger || secondIsTrigger)
-				{
-					c->OnTriggerStay(first, second);
-				}
-				else
-				{
-					c->OnCollisionStay(first, second);
-				}
-			}
-
-			for (const auto& c : secondCollisionListeners)
-			{
-				if (firstIsTrigger || secondIsTrigger)
-				{
-					c->OnTriggerStay(second, first);
-				}
-				else
-				{
-					c->OnCollisionStay(second, first);
-				}
-			}
-
 			++itr;
 		}
 	}

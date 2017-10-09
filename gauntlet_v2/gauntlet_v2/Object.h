@@ -44,8 +44,13 @@ public:
 
 	void LateUpdate(float timeDelta);
 
-	void OnCollisionEnter(Object* other);
-	void OnCollisionExit(Object* other);
+	void OnCollisionEnter(std::shared_ptr<Object> other);
+	void OnCollisionStay(std::shared_ptr<Object> other);
+	void OnCollisionExit(std::shared_ptr<Object> other);
+
+	void OnTriggerEnter(std::shared_ptr<Object> other);
+	void OnTriggerStay(std::shared_ptr<Object> other);
+	void OnTriggerExit(std::shared_ptr<Object> other);
 
 	void Destroy();
 
@@ -125,6 +130,7 @@ public:
 
 	//static:
 	static void Add(std::shared_ptr<Object> object);
+	static std::vector<std::shared_ptr<Object>>& GetObjects();
 	static std::vector<std::shared_ptr<Object>> GetObjectsWithTag(const std::string& tag);
 	static void ProcessNewObjects();
 	static std::vector<std::shared_ptr<Object>> GetNewObjects();

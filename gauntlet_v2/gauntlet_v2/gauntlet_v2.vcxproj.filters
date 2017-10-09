@@ -178,7 +178,10 @@
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="C_BehaviorApplier.h">
-      <Filter>Header Files\Components</Filter>
+      <Filter>Header Files\Components\Movement Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="C_CircleCollider.h">
+      <Filter>Header Files\Components\Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -276,7 +279,10 @@
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="C_BehaviorApplier.cpp">
-      <Filter>Source Files\Components</Filter>
+      <Filter>Source Files\Components\Movement Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="C_CircleCollider.cpp">
+      <Filter>Source Files\Components\Collision</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -5,6 +5,9 @@
 #include "SharedContext.h"
 #include "S_Game.h"
 
+
+const sf::Vector2f C_Pathfinding::zeroVector = { 0.f, 0.f };
+
 C_Pathfinding::C_Pathfinding(Object* owner) : Component(owner),
 m_currentTarget({ 0.f, 0.f }),
 m_speed(0),
@@ -39,7 +42,7 @@ void C_Pathfinding::Update(float deltaTime)
 			// Need to find path to player.
 			if (m_owner->m_context.m_pathFinder->IsCached(pos, playerPos))
 			{
-				// If path is cached then lets retrieve that and not bother with other optomisation attempts.
+				// If path is cached then lets retrieve that and not bother with other optimization attempts.
 				m_targetPositions = context.m_pathFinder->GetPath(pos, playerPos);
 			}
 			else
@@ -63,7 +66,7 @@ void C_Pathfinding::Update(float deltaTime)
 		}
 	}
 
-	sf::Vector2f* targetLocation = GetNextReactivePosition(context, pos);
+	sf::Vector2f* targetLocation = GetNextPosition(); // GetNextReactivePosition(context, pos);
 
 	// Move towards current target location.
 	if (targetLocation)
@@ -72,22 +75,25 @@ void C_Pathfinding::Update(float deltaTime)
 
 		if (abs(velocity.x) < 10.f && abs(velocity.y) < 10.f) // Reached target.
 		{
+			/*
 			if (m_targetPositions.size() == 1)
 			{
 				m_targetPositions.clear();
 			}
-			//RemoveFirst();
+			*/
+			RemoveFirst();
 		}
 		else
 		{
 			sf::Vector2f velNorm = Mathf::normalize(velocity);
+			sf::Vector2f move = (velNorm * (float)m_speed * deltaTime);
 
-			m_movement->Set((velNorm * (float)m_speed * deltaTime));
+			m_movement->Set(move);
 		}
 	}
 	else
 	{
-		m_movement->Set(sf::Vector2f(0.f, 0.f));
+		m_movement->Set(zeroVector);
 	}
 }
 

@@ -215,6 +215,7 @@ public:
 	*/
 	int AddTile(std::string fileName, TILE tileType);
 
+	bool CausesCollision(const sf::Vector2f& pos);
 private:
 
 	/**

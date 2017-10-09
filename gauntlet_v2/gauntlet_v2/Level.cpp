@@ -587,3 +587,35 @@ void Level::Draw(sf::RenderWindow& window, float timeDelta)
 		}
 	}
 }
+
+bool Level::CausesCollision(const sf::Vector2f& newPosition)
+{
+	// Get the tiles that the four corners other player are overlapping with.
+	Tile* overlappingTiles[4];
+
+	// Top left.
+	overlappingTiles[0] = GetTile(sf::Vector2f(newPosition.x - 14.f, newPosition.y - 14.f));
+
+	// Top right.
+	overlappingTiles[1] = GetTile(sf::Vector2f(newPosition.x + 14.f, newPosition.y - 14.f));
+
+	// Bottom left.
+	overlappingTiles[2] = GetTile(sf::Vector2f(newPosition.x - 14.f, newPosition.y + 14.f));
+
+	// Bottom right.
+	overlappingTiles[3] = GetTile(sf::Vector2f(newPosition.x + 14.f, newPosition.y + 14.f));
+
+	// If any of the overlapping tiles are solid there was a collision.
+	for (int i = 0; i < 4; i++)
+	{
+		if (IsSolid(overlappingTiles[i]->columnIndex, overlappingTiles[i]->rowIndex))
+		{
+			return true;
+		}
+	}
+
+	// If we've not returned yet no collisions were found.
+	return false;
+}
+
+

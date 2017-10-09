@@ -131,6 +131,7 @@
     <ClInclude Include="C_BehaviorApplier.h" />
     <ClInclude Include="C_BoxCollider.h" />
     <ClInclude Include="C_Camera.h" />
+    <ClInclude Include="C_CircleCollider.h" />
     <ClInclude Include="C_Collidable.h" />
     <ClInclude Include="C_CollidableTest.h" />
     <ClInclude Include="C_Collider2D.h" />
@@ -168,6 +169,7 @@
     <ClCompile Include="C_BehaviorApplier.cpp" />
     <ClCompile Include="C_BoxCollider.cpp" />
     <ClCompile Include="C_Camera.cpp" />
+    <ClCompile Include="C_CircleCollider.cpp" />
     <ClCompile Include="C_Collidable.cpp" />
     <ClCompile Include="C_CollidableTest.cpp" />
     <ClCompile Include="C_Collider2D.cpp" />

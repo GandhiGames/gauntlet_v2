@@ -17,9 +17,6 @@ public:
 
 	void Update(float timeDelta) override;
 
-private:
-	//TODO: should keyboard controller care about collisions? what if we want to change how collisions are checked?
-	bool CausesCollision(const sf::Vector2f& movement, Level& level);
 
 private:
 	std::shared_ptr<C_Velocity> m_movement;

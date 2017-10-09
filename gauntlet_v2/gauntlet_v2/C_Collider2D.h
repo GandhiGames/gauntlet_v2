@@ -1,5 +1,6 @@
 #pragma once
 
+#include<memory>
 #include <SFML\Graphics.hpp>
 
 #include "Bitmask.h"
@@ -11,13 +12,20 @@ enum class CollisionLayer
 	Followers = 2
 };
 
+struct Manifold
+{
+	bool colliding = false;
+	sf::Vector2f resolve = sf::Vector2f(0.f, 0.f);
+};
+
 class C_Collider2D 
 {
 public:
 	C_Collider2D();
-	virtual ~C_Collider2D() = 0;
+	~C_Collider2D();
 
-	virtual const sf::FloatRect& GetCollidable() const = 0;
+	virtual Manifold Intersects(std::shared_ptr<C_Collider2D> other) = 0;
+	virtual void ResolveOverlap(const Manifold& m) = 0;
 
 	bool IsTrigger() const;
 	void SetTrigger(bool isTrigger);

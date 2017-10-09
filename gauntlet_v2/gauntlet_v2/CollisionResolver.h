@@ -29,7 +29,7 @@ private:
 
 	std::map<CollisionLayer, std::vector<std::shared_ptr<Object>>> m_collidables;
 
-	std::set<std::pair<std::shared_ptr<C_BoxCollider>, std::shared_ptr<C_BoxCollider>>> m_colliding;
+	std::set<std::pair<std::shared_ptr<Object>, std::shared_ptr<Object>>> m_colliding;
 
 	
 };

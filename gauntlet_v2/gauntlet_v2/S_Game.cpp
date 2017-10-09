@@ -61,15 +61,15 @@ void S_Game::OnCreate()
 	obj1Sprite->SetSprite(TextureManager::GetTexture(textureIDs[static_cast<int>(ANIMATION_STATE::WALK_UP)]), false, 8, 12);
 	obj1Sprite->SetOrigin(sf::Vector2f(13.f, 18.f));
 
-	m_player->AddComponent<C_CollidableTest>();
-	m_player->AddComponent<C_RaycastTest>();
+	//m_player->AddComponent<C_CollidableTest>();
+	//m_player->AddComponent<C_RaycastTest>();
 
 	m_player->AddComponent<C_Camera>();
 
 	Object::Add(m_player);
 	//Player setup end.
 
-	for (int i = 0; i < 30; ++i)
+	for (int i = 0; i < 10; ++i)
 	{
 		auto follower = std::make_shared<Object>(*m_stateManager->m_context);
 
@@ -91,8 +91,8 @@ void S_Game::OnCreate()
 		auto followerAnim = follower->AddComponent<C_DirectionalAnimation>();
 		followerAnim->SetTextures(textureIDs);
 
-		//follower->AddComponent<C_Seperation>();
-		//follower->AddComponent<C_BehaviorApplier>();
+		follower->AddComponent<C_Seperation>();
+		follower->AddComponent<C_BehaviorApplier>();
 
 		Object::Add(follower);
 	}

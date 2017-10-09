@@ -25,6 +25,9 @@ public:
 	//TODO: should we clamp values so they do not enter tiles.
 	void SetPosition(float x, float y);
 
+	void AddPosition(sf::Vector2f position);
+
+
 	void SetX(float x);
 
 	void SetY(float y);

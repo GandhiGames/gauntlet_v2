@@ -1,11 +1,11 @@
 #include "C_Seperation.h"
 #include "Object.h"
 
-const float C_Seperation::MAG_OFFSET = .01f;
+const float C_Seperation::MAG_OFFSET = .09f;
 
 C_Seperation::C_Seperation(Object* owner) : C_MovementBehavior(owner)
 {
-	m_weight = 1;
+	m_weight = 2;
 }
 
 
@@ -13,18 +13,28 @@ C_Seperation::~C_Seperation()
 {
 }
 
-const sf::Vector2f C_Seperation::GetForce() 
+const sf::Vector2f C_Seperation::GetForce()
 {
 	sf::Vector2f force(0.f, 0.f);
 
-	auto entities = GetEntitiesInSight(50.f, FOLLOWER_TAG);
+	float sightRadius = 30.f * 30.f;
 
-	for(auto& obj : entities) 
+	for (auto obj : Object::GetObjects())
 	{
-		sf::Vector2f toAgent = (m_owner->m_transform->GetPosition() - obj->m_transform->GetPosition());
-		force += Mathf::normalize(toAgent) / (Mathf::magnitude(toAgent) * MAG_OFFSET);
+		if (obj->m_tag->Get() == FOLLOWER_TAG)
+		{
+			if (obj->m_instanceID->Get() != m_owner->m_instanceID->Get())
+			{
+				sf::Vector2f toAgent = (m_owner->m_transform->GetPosition() - obj->m_transform->GetPosition());
+				float to = Mathf::sqrMagnitude(toAgent);
+
+				if (to < sightRadius)
+				{
+					force += Mathf::normalize(toAgent) / (sqrt(to) * MAG_OFFSET);
+				}
+			}
+		}
 	}
 
-	Debug::Log(force);
 	return force;
 }
