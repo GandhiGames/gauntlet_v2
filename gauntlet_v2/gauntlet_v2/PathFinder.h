@@ -3,23 +3,24 @@
 #include <map>
 #include <queue>
 
-#include "Level.h"
+#include "DungeonGenerator.h"
 
 class PathFinder
 {
 public:
-	PathFinder(Level& level);
+	PathFinder();
 	~PathFinder();
 
-	std::vector<sf::Vector2f> GetPath(const sf::Vector2f& from, const sf::Vector2f& to);
+	const std::vector<sf::Vector2f>& GetPath(DungeonGenerator& level, const sf::Vector2f& from, const sf::Vector2f& to);
+	const std::vector<DungeonTile*> GetPathWithObstacles(DungeonGenerator& level, DungeonTile& from, DungeonTile& to);
 
-	bool IsCached(const sf::Vector2f& from, const sf::Vector2f& to);
+	bool IsCached(DungeonGenerator& level, const sf::Vector2f& from, const sf::Vector2f& to);
 
 private:
-	Level& m_level;
-	std::map<std::pair<Tile*, Tile*>, std::vector<sf::Vector2f>> m_cached;
+	std::map<std::pair<DungeonTile*, DungeonTile*>, std::vector<sf::Vector2f>> m_cached;
 
 	int m_max;
 	int m_currentExecutions;
+	const std::vector<sf::Vector2f> m_emptyPositions;
 };
 

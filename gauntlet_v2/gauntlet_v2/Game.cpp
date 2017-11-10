@@ -1,16 +1,15 @@
 #include "Game.h"
 
 
-Game::Game() : m_window(sf::VideoMode::getDesktopMode(), "Gauntlet_v0.1", sf::Style::Titlebar),
+Game::Game() : m_window(sf::VideoMode::getDesktopMode(), "Gauntlet_v0.2", sf::Style::Titlebar),
 m_isRunning(true), m_stateManager(&m_context)
 {
 	// Set a random seed.
+	//srand(1);
 	srand(static_cast<unsigned int>(time(nullptr)));
-
 	m_window.setVerticalSyncEnabled(true);
 	m_window.setMouseCursorVisible(false);
 	m_window.setFramerateLimit(60);
-
 
 	m_elapsed = m_clock.restart().asSeconds();
 
@@ -26,10 +25,17 @@ Game::~Game()
 
 void Game::Update()
 {
+	if (!m_window.isOpen())
+	{
+		m_isRunning = false;
+		m_window.close();
+		return;
+	}
+
 	sf::Event event;
 	if (m_window.pollEvent(event))
 	{
-		if ((event.type == sf::Event::Closed) || (Input::IsKeyPressed(Input::KEY::KEY_ESC)))
+		if (event.type == sf::Event::Closed)
 		{
 			m_isRunning = false;
 			m_window.close();
@@ -42,7 +48,7 @@ void Game::Update()
 
 void Game::Draw()
 {
-	m_window.clear(sf::Color(0, 0, 0, 225));
+	m_window.clear(sf::Color::White);
 
 	m_stateManager.Draw(m_elapsed);
 

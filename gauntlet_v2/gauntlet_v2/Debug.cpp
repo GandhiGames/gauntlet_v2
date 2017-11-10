@@ -1,14 +1,37 @@
 #include "Debug.h"
+#include "SharedContext.h"
+#include "DungeonGenerator.h"
 
 std::vector<std::array<sf::Vertex, 2>> Debug::m_lines = {};
+sf::Font Debug::m_debugFont = {};
+std::vector<sf::Text> Debug::m_coordinateTexts = {};
+bool Debug::m_drawGridCoordinates = false;
 
-Debug::Debug()
+void Debug::Initialise(SharedContext& context)
 {
-}
+	//TODO: download font and test this.
+	//m_debugFont.loadFromFile("arial.ttf");
 
+	auto level = context.m_level;
+	auto nodes = level->GetNodes();
 
-Debug::~Debug()
-{
+	m_coordinateTexts.reserve(nodes.GetWidth() * nodes.GetHeight());
+
+	for (int x = 0; x < nodes.GetWidth(); x++)
+	{
+		for (int y = 0; y < nodes.GetHeight(); y++)
+		{
+			auto tile = nodes.GetTile(x, y);
+			std::string textString = "test"; // x + ", " + y;
+			sf::Text text(textString , m_debugFont);
+			text.setCharacterSize(30);
+			text.setStyle(sf::Text::Bold);
+			text.setFillColor(sf::Color::Red);
+			text.setPosition(level->GetTilePosition(x, y));
+
+			m_coordinateTexts.push_back(text);
+		}
+	}
 }
 
 void Debug::Draw(sf::RenderWindow& window)
@@ -20,6 +43,14 @@ void Debug::Draw(sf::RenderWindow& window)
 	}
 
 	m_lines.clear();
+
+	if (m_drawGridCoordinates)
+	{
+		for (auto& t : m_coordinateTexts)
+		{
+			window.draw(t);
+		}
+	}
 }
 
 void Debug::DrawLine(const sf::Vector2f& from, const sf::Vector2f& to, sf::Color colour)
@@ -52,6 +83,7 @@ void Debug::Log(const char* msg)
 	printf(msg);
 }
 
+//TODO: differentiate between log, warning, and error
 void Debug::LogWarning(const char* msg)
 {
 	printf(msg);
@@ -60,4 +92,9 @@ void Debug::LogWarning(const char* msg)
 void Debug::LogError(const char* msg)
 {
 	printf(msg);
+}
+
+void Debug::ToggleGridCoordinates(bool draw)
+{
+	m_drawGridCoordinates = draw;
 }

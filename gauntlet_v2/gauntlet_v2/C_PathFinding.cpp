@@ -1,19 +1,18 @@
 #include "C_Pathfinding.h"
-#include "Level.h"
+#include "DungeonGenerator.h"
 #include "Object.h"
 #include "PathFinder.h"
 #include "SharedContext.h"
-#include "S_Game.h"
+#include "NodeList.h"
 
-
-const sf::Vector2f C_Pathfinding::zeroVector = { 0.f, 0.f };
+sf::Vector2f C_Pathfinding::zeroVector = { 0.f, 0.f };
 
 C_Pathfinding::C_Pathfinding(Object* owner) : Component(owner),
 m_currentTarget({ 0.f, 0.f }),
 m_speed(0),
 m_prevTargetTile(nullptr)
 {
-	m_speed = rand() % 51 + 150;
+	m_speed = rand() % 15 + 30;
 
 	m_movement = owner->GetComponent<C_Velocity>();
 }
@@ -26,10 +25,11 @@ C_Pathfinding::~C_Pathfinding()
 void C_Pathfinding::Update(float deltaTime)
 {
 	SharedContext& context = m_owner->m_context;
-	const sf::Vector2f& playerPos = (*context.m_player)->m_transform->GetPosition();
-	Level* level = context.m_level;
+	const sf::Vector2f& playerPos = context.m_player->m_transform->GetPosition();
+	
+	DungeonGenerator* level = context.m_level;
 
-	Tile*curTile = level->GetTile(playerPos);
+	DungeonTile* curTile = level->GetNodes().GetTile(playerPos);
 
 	auto pos = m_owner->m_transform->GetPosition();
 
@@ -37,13 +37,14 @@ void C_Pathfinding::Update(float deltaTime)
 	{
 		m_prevTargetTile = curTile;
 
-		if (Mathf::distance(playerPos, pos) < 300.0f)
+		if (Mathf::distance(playerPos, pos) < 100.0f)
 		{
+			DungeonGenerator* level = context.m_level;
 			// Need to find path to player.
-			if (m_owner->m_context.m_pathFinder->IsCached(pos, playerPos))
+			if (m_owner->m_context.m_pathFinder->IsCached(*level, pos, playerPos))
 			{
 				// If path is cached then lets retrieve that and not bother with other optimization attempts.
-				m_targetPositions = context.m_pathFinder->GetPath(pos, playerPos);
+				m_targetPositions = context.m_pathFinder->GetPath(*level, pos, playerPos);
 			}
 			else
 			{
@@ -58,7 +59,7 @@ void C_Pathfinding::Update(float deltaTime)
 					if (!foundLocalPath)
 					{
 						// If all else fails lets calculate the path.
-						m_targetPositions = context.m_pathFinder->GetPath(pos, playerPos);
+						m_targetPositions = context.m_pathFinder->GetPath(*level, pos, playerPos);
 					}
 				}
 			}
@@ -73,7 +74,7 @@ void C_Pathfinding::Update(float deltaTime)
 	{
 		sf::Vector2f velocity = sf::Vector2f(targetLocation->x - pos.x, targetLocation->y - pos.y);
 
-		if (abs(velocity.x) < 10.f && abs(velocity.y) < 10.f) // Reached target.
+		if (abs(velocity.x) < 1.f && abs(velocity.y) < 1.f) // Reached target.
 		{
 			/*
 			if (m_targetPositions.size() == 1)

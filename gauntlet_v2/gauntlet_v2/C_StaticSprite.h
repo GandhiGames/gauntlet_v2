@@ -30,7 +30,9 @@ public:
 	* @param frameSpeed The speed that the animation plays at. Defaults to 1.
 	* @return true if the operation succeeded.
 	*/
-	bool SetSprite(sf::Texture& texture);
+	void SetSprite(sf::Texture& texture);
+
+	void SetSprite(sf::Texture& texture, sf::IntRect rect);
 
 	/**
 	* Returns a reference the object's sprite.
@@ -40,6 +42,7 @@ public:
 
 	void SetColour(const sf::Color& colour);
 
+	void SetScale(sf::Vector2f& scale);
 
 private:
 	/**

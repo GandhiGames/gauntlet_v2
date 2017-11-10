@@ -3,12 +3,6 @@
 #include "Object.h"
 
 C_AnimatedSprite::C_AnimatedSprite(Object* owner) : Component(owner),
-m_animationSpeed(0),
-m_frameCount(0),
-m_currentFrame(0),
-m_frameWidth(0),
-m_frameHeight(0),
-m_timeDelta(0),
 m_animated(false)
 {
 	//TODO: test this works, implement more error checking.
@@ -19,24 +13,53 @@ C_AnimatedSprite::~C_AnimatedSprite()
 {
 }
 
-void C_AnimatedSprite::Update(float deltaTime)
+void C_AnimatedSprite::LateUpdate(float deltaTime)
 {
-	m_sprite.setPosition(m_owner->m_transform->GetPosition());
+	if (m_curAnimation)
+	{
+		m_curAnimation->m_sprite.setPosition(m_owner->m_transform->GetPosition());
+	}
+}
+
+// Draws the object to the given render window.
+void C_AnimatedSprite::Draw(sf::RenderWindow &window, float timeDelta)
+{
+	if (m_animated && m_curAnimation)
+	{
+		m_curAnimation->Draw(window, timeDelta);
+	}
+}
+
+void C_AnimatedSprite::AddAnimation(ANIMATION_STATE state, Animation animation)
+{
+	auto inserted = m_animations.insert(std::make_pair(state, std::make_shared<Animation>(animation)));
+
+	if (!m_curAnimation)
+	{
+		m_curAnimation = inserted.first->second;
+
+		m_animated = true;
+	}
+}
+
+void C_AnimatedSprite::SetCurrentAnimation(ANIMATION_STATE state)
+{
+	auto animation = m_animations.find(state);
+	if (animation != m_animations.end())
+	{
+		m_curAnimation = animation->second;
+		m_curAnimation->Reset();
+	}
 }
 
 void C_AnimatedSprite::SetAnimated(bool animated)
 {
-	m_animated = animated;
+	if (animated && !m_animated && m_curAnimation) // if we want to be animated but we are not currently animated.
+	{
+		m_curAnimation->Reset();
+	}
 
-	if (m_animated)
-	{
-		m_currentFrame = 0;
-	}
-	else
-	{
-		// set the texture rect of the first frame
-		m_sprite.setTextureRect(sf::IntRect(0, 0, m_frameWidth, m_frameHeight));
-	}
+	m_animated = animated;
 }
 
 bool C_AnimatedSprite::IsAnimated()
@@ -44,97 +67,12 @@ bool C_AnimatedSprite::IsAnimated()
 	return m_animated;
 }
 
-// Gives the object the given sprite.
-bool C_AnimatedSprite::SetSprite(sf::Texture& texture, bool isSmooth, int frames, int frameSpeed)
+const sf::Sprite* C_AnimatedSprite::GetSprite()
 {
-	// Create a sprite from the loaded texture.
-	m_sprite.setTexture(texture);
-
-	// Set animation speed.
-	m_animationSpeed = frameSpeed;
-
-	// Store the number of frames.
-	m_frameCount = frames;
-
-	// Calculate frame dimensions.
-	sf::Vector2u texSize = m_sprite.getTexture()->getSize();
-	m_frameWidth = texSize.x / m_frameCount;
-	m_frameHeight = texSize.y;
-
-	// Check if animated or static.
-	if (frames > 1)
+	if (m_curAnimation)
 	{
-		// Set sprite as animated.
-		m_animated = true;
-
-		// Set the texture rect of the first frame.
-		m_sprite.setTextureRect(sf::IntRect(0, 0, m_frameWidth, m_frameHeight));
-	}
-	else
-	{
-		m_animated = false;
+		return &m_curAnimation->m_sprite;
 	}
 
-	// Set the origin of the sprite.
-	m_sprite.setOrigin(m_frameWidth / 2.f, m_frameHeight / 2.f);
-
-	return true;
-}
-
-//TODO: remove this function and provide functionality through different methods.
-const sf::Sprite& C_AnimatedSprite::GetSprite()
-{
-	return m_sprite;
-}
-
-void C_AnimatedSprite::SetOrigin(const sf::Vector2f origin)
-{
-	m_sprite.setOrigin(origin);
-}
-
-void C_AnimatedSprite::SetTexture(const sf::Texture& texture)
-{
-	m_sprite.setTexture(texture);
-}
-
-// Draws the object to the given render window.
-void C_AnimatedSprite::Draw(sf::RenderWindow &window, float timeDelta)
-{
-	if (m_animated)
-	{
-		// add the elapsed time since the last draw call to the aggregate
-		m_timeDelta += timeDelta;
-
-		// check if the frame should be updated
-		if (m_timeDelta >= (1.f / m_animationSpeed))
-		{
-			NextFrame();
-			m_timeDelta = 0;
-		}
-	}
-
-	window.draw(m_sprite);
-}
-
-// Advances the sprite forward a frame.
-void C_AnimatedSprite::NextFrame()
-{
-	// check if we reached the last frame
-	if (m_currentFrame == (m_frameCount - 1))
-	{
-		m_currentFrame = 0;
-	}
-	else
-	{
-		m_currentFrame++;
-	}
-
-	// update the texture rect
-	m_sprite.setTextureRect(sf::IntRect(m_frameWidth * m_currentFrame, 0, m_frameWidth, m_frameHeight));
-}
-
-// Gets the frame count of the object.
-int C_AnimatedSprite::GetFrameCount() const
-{
-	return m_frameCount;
+	return nullptr;
 }

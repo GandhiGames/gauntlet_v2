@@ -13,7 +13,7 @@ public:
 
 	void Update(float timeDelta) override;
 
-	void Set(const sf::Vector2f& velocity);
+	void Set(sf::Vector2f& velocity);
 	const sf::Vector2f& Get() const;
 
 private:

@@ -21,20 +21,15 @@ public:
 
 	void Update(float timeDelta) override;
 
-	//TODO: performance concerns with passing std::array?
-	void SetTextures(std::array<int, static_cast<int>(ANIMATION_STATE::COUNT)> textureIDs);
-
-	const int& GetTextureID() const;
-
-	//TODO: getters/setters
-	std::array<int, static_cast<int>(ANIMATION_STATE::COUNT)> m_textureIDs;
-	std::array<sf::Texture, static_cast<int>(ANIMATION_STATE::COUNT)> m_textures;
 
 private:
 	std::shared_ptr<C_AnimatedSprite> m_sprite;
 	std::shared_ptr<C_Velocity> m_movement;
 
+	ANIMATION_STATE m_currentState;
 
-	int m_currentTextureIndex;
+	MOVEMENT_DIRECTION m_prevDirection;
+
+	std::map<MOVEMENT_DIRECTION, ANIMATION_STATE> m_idleDirections;
 };
 

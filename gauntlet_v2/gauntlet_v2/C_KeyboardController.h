@@ -9,7 +9,6 @@
 class C_KeyboardController : public Component, public C_Updateable
 {
 	friend class Object;
-	friend class Level;
 
 public:
 	C_KeyboardController(Object* owner);
@@ -17,7 +16,7 @@ public:
 
 	void Update(float timeDelta) override;
 
-
+	void SetMovementSpeed(int speed);
 private:
 	std::shared_ptr<C_Velocity> m_movement;
 

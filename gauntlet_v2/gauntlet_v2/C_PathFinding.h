@@ -7,8 +7,8 @@
 
 class C_Pathfinding : public Component, public C_Updateable
 {
-	friend class Level;
-	friend struct Tile;
+	friend struct DungeonTile;
+
 public:
 	C_Pathfinding(Object* owner);
 	~C_Pathfinding();
@@ -41,8 +41,8 @@ private:
 
 	int m_speed;
 
-	Tile* m_prevTargetTile;
+	DungeonTile* m_prevTargetTile;
 
-	static const sf::Vector2f zeroVector;
+	static sf::Vector2f zeroVector;
 };
 

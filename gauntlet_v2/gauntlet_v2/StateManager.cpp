@@ -3,10 +3,10 @@
 StateManager::StateManager(SharedContext* l_shared)
 	: m_context(l_shared)
 {
-	//RegisterState<State_Intro>(StateType::Intro);
+	RegisterState<S_Intro>(StateType::Intro);
 	//RegisterState<State_MainMenu>(StateType::MainMenu);
 	RegisterState<S_Game>(StateType::Game);
-	//RegisterState<State_Paused>(StateType::Paused);
+	RegisterState<S_Paused>(StateType::Paused);
 	//RegisterState<State_GameOver>(StateType::GameOver);
 }
 

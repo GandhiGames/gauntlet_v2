@@ -19,33 +19,31 @@ void C_Camera::LateUpdate(float deltaTime)
 	sf::View view = window->getView();
 	
 	view.setCenter(m_owner->m_transform->GetPosition());
-	window->setView(view);
 
-
+	/*
 	sf::Vector2f viewCenter(window->getView().getCenter());
 	sf::Vector2f viewSize(window->getView().getSize());
-	sf::Vector2f viewSizeHalf(viewSize.x / 2, viewSize.y / 2);
+	sf::Vector2f viewSizeHalf(viewSize.x / 2.f, viewSize.y / 2.f);
 	sf::FloatRect viewSpace(viewCenter - viewSizeHalf, viewSize);
 
 	if (viewSpace.left <= 0)
 	{
 		view.setCenter(viewSpace.width / 2, view.getCenter().y);
-		window->setView(view);
 	}
 	else if (viewSpace.left + viewSpace.width > GRID_WIDTH * TILE_SIZE)
 	{
 		view.setCenter((GRID_WIDTH * TILE_SIZE) - (viewSpace.width / 2), view.getCenter().y);
-		window->setView(view);
 	}
 
 	if (viewSpace.top <= 0)
 	{
 		view.setCenter(view.getCenter().x, viewSpace.height / 2);
-		window->setView(view);
 	}
 	else if (viewSpace.top + viewSpace.height > GRID_HEIGHT * TILE_SIZE)
 	{
 		view.setCenter(view.getCenter().x, (GRID_HEIGHT * TILE_SIZE) - (viewSpace.height / 2));
-		window->setView(view);
 	}
+	*/
+
+	window->setView(view);
 }

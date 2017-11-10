@@ -1,11 +1,11 @@
 #include "C_Seperation.h"
 #include "Object.h"
 
-const float C_Seperation::MAG_OFFSET = .09f;
+const float C_Seperation::MAG_OFFSET = .3f;
 
 C_Seperation::C_Seperation(Object* owner) : C_MovementBehavior(owner)
 {
-	m_weight = 2;
+	m_weight = 1;
 }
 
 
@@ -17,7 +17,7 @@ const sf::Vector2f C_Seperation::GetForce()
 {
 	sf::Vector2f force(0.f, 0.f);
 
-	float sightRadius = 30.f * 30.f;
+	float sightRadius = 10.f * 10.f;
 
 	for (auto obj : Object::GetObjects())
 	{

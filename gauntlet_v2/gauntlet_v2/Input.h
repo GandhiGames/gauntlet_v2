@@ -16,7 +16,8 @@ public:
 		KEY_UP,
 		KEY_DOWN,
 		KEY_ATTACK,
-		KEY_ESC
+		KEY_ESC,
+		KEY_RETURN
 	};
 
 	/**

@@ -7,9 +7,9 @@
 
 class Debug
 {
+	friend class SharedContext;
 public:
-	Debug();
-	~Debug();
+	static void Initialise(SharedContext& context);
 
 	static void Draw(sf::RenderWindow& window);
 
@@ -21,7 +21,16 @@ public:
 	static void LogWarning(const char* msg);
 	static void LogError(const char* msg);
 
+	static void ToggleGridCoordinates(bool draw);
+
 private:
 	static std::vector<std::array<sf::Vertex, 2>> m_lines;
+
+	static bool m_drawGridCoordinates;
+
+	static sf::Font m_debugFont;
+
+	static std::vector<sf::Text> m_coordinateTexts;
+
 };
 

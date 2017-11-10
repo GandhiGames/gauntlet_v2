@@ -107,7 +107,10 @@ Manifold C_BoxCollider::Intersects(std::shared_ptr<C_Collider2D> other)
 void C_BoxCollider::ResolveOverlap(const Manifold& m)
 {
 	auto vel = m_owner->GetComponent<C_Velocity>();
-	vel->Set(vel->Get() + m.resolve);
+	if (vel)
+	{
+		vel->Set(vel->Get() + (m.resolve * .5f));
+	}
 	//m_owner->m_transform->SetPosition(m_owner->m_transform->GetPosition() + m.resolve);
 }
 

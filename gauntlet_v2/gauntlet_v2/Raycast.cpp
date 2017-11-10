@@ -1,6 +1,6 @@
 #include "Raycast.h"
 #include "SharedContext.h"
-#include "Level.h"
+#include "DungeonGenerator.h"
 
 
 Raycast::Raycast()
@@ -20,14 +20,28 @@ std::vector<sf::Vector2f> Raycast::BresenhamLine(const sf::Vector2f& from, const
 	// advance the size of "result" and to use a fixed-size array
 	// instead of a list.
 	std::vector<sf::Vector2f> result;
-
-	int steps = 5 + 1;
+	
 	sf::Vector2f diff = to - from;
+	int steps = 0;
+
+	float absDiffX = abs(diff.x);
+	float absDiffY = abs(diff.y);
+
+	if (absDiffX > absDiffY)
+	{
+		steps = (absDiffX / DUNGEON_TILE_SIZE) + 1;
+	}
+	else
+	{
+		steps = (absDiffY / DUNGEON_TILE_SIZE) + 1;
+	}
+
 	float xStep = diff.x / steps;
 	float yStep = diff.y / steps;
 
-	if (xStep >= TILE_SIZE || yStep >= TILE_SIZE)
+	if (xStep >= DUNGEON_TILE_SIZE || yStep >= DUNGEON_TILE_SIZE)
 	{
+		//TODO: ensure this is never called and remove
 		Debug::LogWarning("Raycast::Raycast not granular enough");
 	}
 

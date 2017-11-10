@@ -1,6 +1,31 @@
 #pragma once
 
-enum class ANIMATION_STATE 
+#include <string>
+#include <SFML\Graphics.hpp>
+
+enum DungeonTileType
+{
+	Invalid = -1,
+	Wall,
+	WallTopLeft,
+	WallTopMiddle,
+	WallTopRight,
+	WallMiddleLeft,
+	WallMiddle,
+	WallMiddleRight,
+	WallBottomLeft,
+	WallBottomMiddle,
+	WallBottomRight,
+	Floor,
+	Entry,
+	Exit,
+	FacadeLeft,
+	FacadeMiddle,
+	FacadeRight,
+	Max
+};
+
+enum ANIMATION_STATE 
 {
 	WALK_UP,
 	WALK_DOWN,
@@ -11,6 +36,14 @@ enum class ANIMATION_STATE
 	IDLE_RIGHT,
 	IDLE_LEFT,
 	COUNT
+};
+
+enum MOVEMENT_DIRECTION
+{
+	LEFT,
+	DOWN,
+	RIGHT,
+	UP
 };
 
 const std::string PLAYER_TAG = "Player";
@@ -91,9 +124,19 @@ public:
 		v.y = -v.y;
 	}
 
-	sf::Vector2f componentProduct(const sf::Vector2f v1, const sf::Vector2f v2)
+	static sf::Vector2f componentProduct(const sf::Vector2f v1, const sf::Vector2f v2)
 	{
 		return sf::Vector2f(v1.x * v2.x, v1.y * v2.y);
+	}
+
+	static int to1DIndex(int x, int y, int width)
+	{
+		return y * width + x;
+	}
+
+	static float RandomValue()
+	{
+		return (float)rand() / (RAND_MAX);
 	}
 };
 

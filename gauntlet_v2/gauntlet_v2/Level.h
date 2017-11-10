@@ -6,10 +6,10 @@ static int const GRID_WIDTH = 37;
 static int const GRID_HEIGHT = 21;
 static int const ROOM_WIDTH_MAX = 7;
 static int const ROOM_HEIGHT_MAX = 7;
-static int const ROOM_COUNT_MAX = 30;
+static int const ROOM_COUNT_MAX = 15;
 
 // The width and height of each tile in pixels.
-static int const TILE_SIZE = 50;
+static int const TILE_SIZE = 16;
 
 enum class TILE 
 {
@@ -43,8 +43,8 @@ enum class TILE
 struct Tile 
 {
 	TILE type;							// The type of tile this is.
-	int columnIndex;					// The column index of the tile.
-	int rowIndex;						// The row index of the tile.
+	int x;					// The column index of the tile.
+	int y;						// The row index of the tile.
 	sf::Sprite sprite;					// The tile sprite.
 	int H;								// Heuristic / movement cost to goal.
 	int G;								// Movement cost. (Total of entire path)
@@ -75,7 +75,7 @@ public:
 	* @param rowIndex The tile's row index.
 	* @return True if the given tile is solid.
 	*/
-	bool IsSolid(int columnIndex, int rowIndex);
+	bool IsSolid(int x, int y);
 	bool IsSolid(sf::Vector2f pos);
 
 	/**
@@ -85,7 +85,7 @@ public:
 	* @param rowIndex The tile's row index.
 	* @param index The new index of the tile.
 	*/
-	void SetTile(int columnIndex, int rowIndex, TILE tileType);
+	void SetTile(int x, int y, TILE tileType);
 
 	/**
 	* Draws the level grid to the provided render window.
@@ -100,7 +100,7 @@ public:
 	* @param rowIndex The row index of the tile to check.
 	* @return The index of the given tile.
 	*/
-	TILE GetTileType(int columnIndex, int rowIndex) const;
+	TILE GetTileType(int x, int y) const;
 
 	/**
 	* Gets the tile at the given position.
@@ -115,7 +115,7 @@ public:
 	* @param rowIndex The row that the tile is in.
 	* @return A pointer to the tile if valid.
 	*/
-	Tile* GetTile(int columnIndex, int rowIndex);
+	Tile* GetTile(int x, int y);
 
 	/**
 	* Gets the position of the level grid relative to the window.
@@ -129,7 +129,7 @@ public:
 	* @param rowIndex The column that the row is in.
 	* @return True if the tile is valid.
 	*/
-	bool TileIsValid(int columnIndex, int rowIndex);
+	bool TileIsValid(int x, int y);
 
 	/**
 	* Sets the overlay color of the level tiles.
@@ -149,7 +149,7 @@ public:
 	* @param rowIndex The column that the row is in.
 	* @return The position of the tile if valid.
 	*/
-	sf::Vector2f GetActualTileLocation(int columnIndex, int rowIndex);
+	sf::Vector2f GetActualTileLocation(int x, int y);
 
 	/**
 	* Returns a valid spawn location from the current room.
@@ -191,7 +191,7 @@ public:
 	* @param rowIndex The column that the row is in.
 	* @return True if the given tile is a floor tile.
 	*/
-	bool IsFloor(int columnIndex, int rowIndex);
+	bool IsFloor(int x, int y);
 
 	/**
 	* Return true if the given tile is a floor tile.
@@ -206,24 +206,17 @@ public:
 	*/
 	int GetTileSize() const;
 
-	/**
-	* Adds a tile to the level.
-	* These tiles are essentially sprites with a unique index. Once added, they can be loaded via the LoadLevelFromFile() function by including its index in the level data.
-	* @param fileName The path to the sprite resource, relative to the project directory.
-	* @param tileType The type of tile that is being added.
-	* @return The index of the tile. This is used when building levels.
-	*/
-	int AddTile(std::string fileName, TILE tileType);
-
 	bool CausesCollision(const sf::Vector2f& pos);
+
 private:
+	void BuildSprite(Tile &t);
 
 	/**
 	* Creates a path between two nodes in the recursive backtracker algorithm.
 	* @param columnIndex The column that the tile is in.
 	* @param rowIndex The column that the row is in.
 	*/
-	void CreatePath(int columnIndex, int rowIndex);
+	void CreatePath(int x, int y);
 
 	/**
 	* Adds a given number of randomly sized rooms to the level to create some open space.
@@ -246,7 +239,7 @@ private:
 	* @param rowIndex The column that the row is in.
 	* @return True if the given tile is a wall tile.
 	*/
-	bool IsWall(int columnIndex, int rowIndex);
+	bool IsWall(int x, int y);
 
 private:
 
@@ -259,20 +252,12 @@ private:
 	Tile m_grid[GRID_WIDTH][GRID_HEIGHT];
 
 	/**
-	* A vector off all the sprites in the level.
-	*/
-	std::vector<sf::Sprite> m_tileSprites;
-
-	/**
 	* The position of the level relative to the window.
 	* This is to the top-left of the level grid.
 	*/
 	sf::Vector2i m_origin;
 
-	/**
-	* An array containing all texture IDs of the level tiles.
-	*/
-	int m_textureIDs[static_cast<int>(TILE::COUNT)];
+	int m_textureID;
 
 	/**
 	* The spawn location for the current level.
@@ -283,4 +268,6 @@ private:
 	* The indices of the tile containing the levels door.
 	*/
 	sf::Vector2i m_doorTileIndices;
+
+	std::map<TILE, sf::IntRect> m_spriteLookup;
 };

@@ -4,10 +4,15 @@
 #include "Object.h"
 
 C_DirectionalAnimation::C_DirectionalAnimation(Object* owner) : Component(owner),
-m_currentTextureIndex(static_cast<int>(ANIMATION_STATE::WALK_DOWN))
+m_currentState(ANIMATION_STATE::COUNT), m_prevDirection(MOVEMENT_DIRECTION::DOWN)
 {
 	m_sprite = owner->GetComponent<C_AnimatedSprite>();
 	m_movement = owner->GetComponent<C_Velocity>();
+
+	m_idleDirections.insert(std::make_pair(MOVEMENT_DIRECTION::LEFT, ANIMATION_STATE::IDLE_LEFT));
+	m_idleDirections.insert(std::make_pair(MOVEMENT_DIRECTION::DOWN, ANIMATION_STATE::IDLE_DOWN));
+	m_idleDirections.insert(std::make_pair(MOVEMENT_DIRECTION::RIGHT, ANIMATION_STATE::IDLE_RIGHT));
+	m_idleDirections.insert(std::make_pair(MOVEMENT_DIRECTION::UP, ANIMATION_STATE::IDLE_UP));
 }
 
 
@@ -15,21 +20,9 @@ C_DirectionalAnimation::~C_DirectionalAnimation()
 {
 }
 
-void C_DirectionalAnimation::SetTextures(std::array<int, static_cast<int>(ANIMATION_STATE::COUNT)> textureIDs)
-{
-	//TODO: remove texture ids? are they necessary?
-	m_textureIDs = textureIDs;
-
-	//TODO: cache textures so don't need to call texturemanager::gettexture
-	for (int i = 0; i < static_cast<int>(ANIMATION_STATE::COUNT); i++)
-	{
-		m_textures[i] = TextureManager::GetTexture(m_textureIDs[i]);
-	}
-}
-
 void C_DirectionalAnimation::Update(float deltaTime)
 {
-	ANIMATION_STATE animState = static_cast<ANIMATION_STATE>(m_currentTextureIndex);
+	ANIMATION_STATE animState = m_currentState;
 
 	const sf::Vector2f& velocity = m_movement->Get();
 
@@ -39,11 +32,13 @@ void C_DirectionalAnimation::Update(float deltaTime)
 		{
 			if (velocity.x <= 0)
 			{
-				animState = ANIMATION_STATE::WALK_LEFT;
+				animState = ANIMATION_STATE::WALK_LEFT; 
+				m_prevDirection = MOVEMENT_DIRECTION::LEFT;
 			}
 			else
 			{
 				animState = ANIMATION_STATE::WALK_RIGHT;
+				m_prevDirection = MOVEMENT_DIRECTION::RIGHT;
 			}
 		}
 		else
@@ -51,55 +46,27 @@ void C_DirectionalAnimation::Update(float deltaTime)
 			if (velocity.y <= 0)
 			{
 				animState = ANIMATION_STATE::WALK_UP;
+				m_prevDirection = MOVEMENT_DIRECTION::UP;
 			}
 			else
 			{
 				animState = ANIMATION_STATE::WALK_DOWN;
+				m_prevDirection = MOVEMENT_DIRECTION::DOWN;
 			}
-		}
-	}
-
-	// set animation speed
-	if ((velocity.x == 0) && (velocity.y == 0))
-	{
-		// the character is still
-		if (m_sprite->IsAnimated())
-		{
-			// Update sprite to idle version.
-			// In our enum we have 4 walking sprites followed by 4 idle sprites.
-			// Given this, we can simply add 4 to a walking sprite to get its idle counterpart.
-			m_currentTextureIndex += 4;
-
-			// Stop movement animations.
-			m_sprite->SetAnimated(false);
 		}
 	}
 	else
 	{
-		// the character is moving
-		if (!m_sprite->IsAnimated())
-		{
-			// Update sprite to walking version.
-			m_currentTextureIndex -= 4;
-
-			// Start movement animations.
-			m_sprite->SetAnimated(true);
-		}
+		animState = m_idleDirections[m_prevDirection];
 	}
+
 
 	// Set the sprite.
-	if (m_currentTextureIndex != static_cast<int>(animState))
+	if (m_currentState != animState)
 	{
-		m_currentTextureIndex = static_cast<int>(animState);
+		m_sprite->SetCurrentAnimation(animState);
 
-		//m_sprite->GetSprite().setTexture(m_textures[textureId]);
-
-		//TODO: optomise out calls to GetTexture?
-		m_sprite->SetTexture(m_textures[m_currentTextureIndex]);
+		m_currentState = animState;
 	}
 }
 
-const int& C_DirectionalAnimation::GetTextureID() const
-{
-	return m_currentTextureIndex;
-}

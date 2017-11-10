@@ -124,6 +124,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="Bitmask.h" />
     <ClInclude Include="CollisionResolver.h" />
     <ClInclude Include="Component.h" />
@@ -149,9 +150,12 @@
     <ClInclude Include="C_Transform.h" />
     <ClInclude Include="C_Updateable.h" />
     <ClInclude Include="Debug.h" />
+    <ClInclude Include="DungeonClusters.h" />
+    <ClInclude Include="DungeonGenerator.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="NodeList.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="PathFinder.h" />
     <ClInclude Include="Raycast.h" />
@@ -160,10 +164,13 @@
     <ClInclude Include="SharedContext.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="S_Game.h" />
+    <ClInclude Include="S_Intro.h" />
+    <ClInclude Include="S_Paused.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Util.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="CollisionResolver.cpp" />
     <ClCompile Include="C_AnimatedSprite.cpp" />
     <ClCompile Include="C_BehaviorApplier.cpp" />
@@ -187,15 +194,20 @@
     <ClCompile Include="C_Transform.cpp" />
     <ClCompile Include="C_Updateable.cpp" />
     <ClCompile Include="Debug.cpp" />
+    <ClCompile Include="DungeonClusters.cpp" />
+    <ClCompile Include="DungeonGenerator.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="NodeList.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="PathFinder.cpp" />
     <ClCompile Include="Raycast.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="S_Game.cpp" />
+    <ClCompile Include="S_Intro.cpp" />
+    <ClCompile Include="S_Paused.cpp" />
     <ClCompile Include="TextureManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

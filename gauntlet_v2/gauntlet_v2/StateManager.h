@@ -8,6 +8,8 @@
 #include "Scene.h"
 #include "SharedContext.h"
 #include "S_Game.h"
+#include "S_Intro.h"
+#include "S_Paused.h"
 
 enum class StateType { Intro = 1, MainMenu, Game, Paused, GameOver, Credits };
 
