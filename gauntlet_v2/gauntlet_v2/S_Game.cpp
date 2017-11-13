@@ -18,7 +18,7 @@ void S_Game::OnCreate()
 	m_view.setSize((float)size.x, (float)size.y);
 	m_view.setCenter(size.x / 2.f, size.y / 2.f);
 	//TODO: move to camera component.
-	m_view.zoom(0.8f);
+	m_view.zoom(.8f);
 	m_stateManager->m_context->m_window->setView(m_view);
 
 	//m_level.GenerateLevel();
@@ -37,16 +37,16 @@ void S_Game::OnCreate()
 	m_player->AddComponent<C_Velocity>();
 	
 	auto controller = m_player->AddComponent<C_KeyboardController>();
-	controller->SetMovementSpeed(80);
+	controller->SetMovementSpeed(120);
 
 	auto playerSprite = m_player->AddComponent<C_AnimatedSprite>();
 	int walkTextureID = TextureManager::AddTexture("../resources/characters/character_male_walk.png");
 	sf::Texture& walkTexture = TextureManager::GetTexture(walkTextureID);
 
-	Animation walkUp(walkTexture, 0, 64, 64, 1, 9, 10);
-	Animation walkLeft(walkTexture, 1, 64, 64, 1, 9, 10);
-	Animation walkDown(walkTexture, 2, 64, 64, 1, 9, 10);
-	Animation walkRight(walkTexture, 3, 64, 64, 1, 9, 10);
+	Animation walkUp(walkTexture, 0, 64, 64, 1, 9, 12);
+	Animation walkLeft(walkTexture, 1, 64, 64, 1, 9, 12);
+	Animation walkDown(walkTexture, 2, 64, 64, 1, 9, 12);
+	Animation walkRight(walkTexture, 3, 64, 64, 1, 9, 12);
 	playerSprite->AddAnimation(ANIMATION_STATE::WALK_UP, walkUp);
 	playerSprite->AddAnimation(ANIMATION_STATE::WALK_LEFT, walkLeft);
 	playerSprite->AddAnimation(ANIMATION_STATE::WALK_DOWN, walkDown);
@@ -109,9 +109,12 @@ void S_Game::OnCreate()
 	Object::Add(shadow);
 	*/
 
+	/*
 	auto label = m_player->AddComponent<C_DebugPositionLabel>();
-	label->SetOffset(sf::Vector2f(0.f, -35.f));
+	label->SetOffset(sf::Vector2f(0.f, -25.f));
 	label->SetSortOrder(1000);
+	*/
+
 	/*******************
 	 Player setup end.
 	********************/
@@ -153,8 +156,6 @@ void S_Game::OnCreate()
 	context->m_pathFinder = &m_pathFinder;
 
 	Debug::Initialise(*context);
-
-	Debug::ToggleGridCoordinates(true);
 }
 
 void S_Game::OnDestroy()

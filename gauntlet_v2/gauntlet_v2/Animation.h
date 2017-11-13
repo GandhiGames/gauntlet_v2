@@ -6,7 +6,8 @@
 class Animation
 {
 public:
-	Animation(sf::Texture& texture, int row, int width, int height, int frameStart, int frameEnd, int frameSpeed);
+	Animation(sf::Texture& texture, int row, int width,
+		int height, int frameStart, int frameEnd, int frameSpeed);
 	~Animation();
 
 	void Draw(sf::RenderWindow &window, float timeDelta);

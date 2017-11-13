@@ -131,6 +131,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="AnimationGroup.h" />
     <ClInclude Include="Bitmask.h" />
     <ClInclude Include="CollisionResolver.h" />
     <ClInclude Include="Component.h" />
@@ -178,6 +179,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="AnimationGroup.cpp" />
     <ClCompile Include="CollisionResolver.cpp" />
     <ClCompile Include="C_AnimatedSprite.cpp" />
     <ClCompile Include="C_BehaviorApplier.cpp" />

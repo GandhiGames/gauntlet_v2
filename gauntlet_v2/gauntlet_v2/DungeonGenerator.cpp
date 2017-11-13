@@ -1,4 +1,5 @@
 #include "DungeonGenerator.h"
+#include "Debug.h"
 
 DungeonGenerator::DungeonGenerator(SharedContext& context) :
 	m_transitionSteps(2),
@@ -6,10 +7,11 @@ DungeonGenerator::DungeonGenerator(SharedContext& context) :
 	m_chanceToBecomeWall(0.4f),
 	m_backgroundToWallConversion(4),
 	m_wallToBackgroundConversion(3),
-	m_origin({ 0.f, -220.f }),
-	m_nodes(DUNGEON_WIDTH, DUNGEON_HEIGHT, m_origin),
+	m_nodes(DUNGEON_WIDTH, DUNGEON_HEIGHT),
 	m_clusters(*this, *context.m_pathFinder)
 {
+	m_nodes.SetOffset(sf::Vector2f(0.f, 0.f));
+
 	auto fileName = "../resources/tilesets/cavern_ruins_tileset.png";
 	m_tilesetID = TextureManager::AddTexture(fileName);
 	auto texture = TextureManager::GetTexture(m_tilesetID);
@@ -106,19 +108,16 @@ bool DungeonGenerator::IsSolid(int i, int j)
 	return false;
 }
 
-bool DungeonGenerator::IsSolid(sf::Vector2f pos)
+bool DungeonGenerator::IsSolid(const sf::Vector2f& pos)
 {
-	// Convert the position to relative to the level grid.
-	pos.x -= m_origin.x;
-	pos.y -= m_origin.y;
+	DungeonTile* node = m_nodes.GetTile(pos);
 
-	// Convert to a tile position.
-	int tileColumn, tileRow;
+	if (node)
+	{
+		return IsSolid(*node);
+	}
 
-	tileColumn = static_cast<int>(pos.x) / DUNGEON_TILE_SIZE;
-	tileRow = static_cast<int>(pos.y) / DUNGEON_TILE_SIZE;
-
-	return IsSolid(tileColumn, tileRow);
+	return false;
 }
 
 bool DungeonGenerator::CausesCollision(const sf::Vector2f& newPosition)
@@ -126,7 +125,7 @@ bool DungeonGenerator::CausesCollision(const sf::Vector2f& newPosition)
 	// Get the tiles that the four corners player overlapping with.
 	DungeonTile* overlappingTiles[4];
 
-	//TODO: move this! calculate on a per sprite basis.
+	//TODO: calculate on a per sprite basis.
 	const float characterSize = 7.f;
 
 	// Top left.
@@ -146,6 +145,8 @@ bool DungeonGenerator::CausesCollision(const sf::Vector2f& newPosition)
 	{
 		if (IsSolid(*overlappingTiles[i]))
 		{
+			Debug::DrawRect(GetTilePosition(overlappingTiles[i]->x, overlappingTiles[i]->y),
+				sf::Vector2f(DUNGEON_TILE_SIZE, DUNGEON_TILE_SIZE), sf::Color::Red);
 			return true;
 		}
 	}
@@ -498,8 +499,10 @@ sf::Vector2f DungeonGenerator::GetTilePosition(int x, int y)
 {
 	sf::Vector2f location;
 
-	location.x = static_cast<float>(m_origin.x + (x * DUNGEON_TILE_SIZE) + (DUNGEON_TILE_SIZE / 2.f));
-	location.y = static_cast<float>(m_origin.y + (y * DUNGEON_TILE_SIZE) + (DUNGEON_TILE_SIZE / 2.f));
+	const sf::Vector2f& origin = m_nodes.GetOffset();
+
+	location.x = static_cast<float>(origin.x + (x * DUNGEON_TILE_SIZE) + (DUNGEON_TILE_SIZE / 2.f));
+	location.y = static_cast<float>(origin.y + (y * DUNGEON_TILE_SIZE) + (DUNGEON_TILE_SIZE / 2.f));
 
 	return location;
 }

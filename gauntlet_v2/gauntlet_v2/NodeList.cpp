@@ -1,8 +1,8 @@
 #include "NodeList.h"
 #include "DungeonGenerator.h"
 
-NodeList::NodeList(int width, int height, sf::Vector2f offset) :
-	m_offset(offset), m_width(width), m_height(height),
+NodeList::NodeList(int width, int height) :
+	m_offset(sf::Vector2f(0.f, 0.f)), m_width(width), m_height(height),
 	m_grid(width * height)
 {
 }
@@ -25,6 +25,17 @@ void NodeList::Draw(sf::RenderWindow &window, float timeDelta)
 	}
 }
 
+
+void NodeList::SetOffset(sf::Vector2f offset)
+{
+	m_offset = offset;
+}
+
+const sf::Vector2f& NodeList::GetOffset()
+{
+	return m_offset;
+}
+
 DungeonTile* NodeList::GetTile(const sf::Vector2i& coord)
 {
 	if (!IsValidCoord(coord.x, coord.y))
@@ -35,14 +46,29 @@ DungeonTile* NodeList::GetTile(const sf::Vector2i& coord)
 	return &m_grid.at(Mathf::to1DIndex(coord.x, coord.y, m_width));
 }
 
+DungeonTile* NodeList::GetTile(const sf::Vector2f& position)
+{
+	/*
+	// Convert the position to relative to the level grid.
+	pos.x -= m_origin.x;
+	pos.y -= m_origin.y;
+
+	// Convert to a tile position.
+	int tileColumn, tileRow;
+
+	tileColumn = static_cast<int>(pos.x) / DUNGEON_TILE_SIZE;
+	tileRow = static_cast<int>(pos.y) / DUNGEON_TILE_SIZE;
+	*/
+	// Convert to a tile position.
+	int tileColumn = (static_cast<int>(position.x - m_offset.x)) / DUNGEON_TILE_SIZE;
+	int tileRow = (static_cast<int>(position.y - m_offset.y)) / DUNGEON_TILE_SIZE;
+
+	return GetTile(tileColumn, tileRow);
+}
+
 DungeonTile* NodeList::GetTile(int x, int y)
 {
-	if (!IsValidCoord(x, y))
-	{
-		return nullptr;
-	}
-
-	return &m_grid.at(Mathf::to1DIndex(x, y, m_width));
+	return GetTile(Mathf::to1DIndex(x, y, m_width));
 }
 
 DungeonTile* NodeList::GetTile(int onedCoord)
@@ -53,21 +79,6 @@ DungeonTile* NodeList::GetTile(int onedCoord)
 	}
 
 	return nullptr;
-}
-
-DungeonTile* NodeList::GetTile(sf::Vector2f position)
-{
-	// Convert the position to relative to the level grid.
-	position.x -= m_offset.x;
-	position.y -= m_offset.y;
-
-	// Convert to a tile position.
-	int tileColumn, tileRow;
-
-	tileColumn = static_cast<int>(position.x) / m_width;
-	tileRow = static_cast<int>(position.y) / m_height;
-
-	return &m_grid.at(Mathf::to1DIndex(tileColumn, tileRow, m_width));
 }
 
 void NodeList::ResetNodes()

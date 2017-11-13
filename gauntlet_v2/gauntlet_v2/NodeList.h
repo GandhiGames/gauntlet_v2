@@ -9,12 +9,15 @@ class NodeList
 {
 	friend struct DungeonTile;
 public:
-	NodeList(int width, int height, sf::Vector2f offset);
+	NodeList(int width, int height);
 	~NodeList();
 
 	void Draw(sf::RenderWindow& window, float timeDelta);
 
-	DungeonTile* GetTile(sf::Vector2f position);
+	void SetOffset(sf::Vector2f offset);
+	const sf::Vector2f& GetOffset();
+
+	DungeonTile* GetTile(const sf::Vector2f& position);
 	DungeonTile* GetTile(const sf::Vector2i& coord);
 	DungeonTile* GetTile(int x, int y);
 	DungeonTile* GetTile(int onedCoord);

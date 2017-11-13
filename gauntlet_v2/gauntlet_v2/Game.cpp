@@ -5,8 +5,8 @@ Game::Game() : m_window(sf::VideoMode::getDesktopMode(), "Gauntlet_v0.2", sf::St
 m_isRunning(true), m_stateManager(&m_context)
 {
 	// Set a random seed.
-	//srand(1);
-	srand(static_cast<unsigned int>(time(nullptr)));
+	srand(1);
+	//srand(static_cast<unsigned int>(time(nullptr)));
 	m_window.setVerticalSyncEnabled(true);
 	m_window.setMouseCursorVisible(false);
 	m_window.setFramerateLimit(60);

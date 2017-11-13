@@ -1,6 +1,8 @@
 #pragma once
 #include "SharedContext.h"
 
+//TODO: Remove this class!
+
 // Constants for the game grid size.
 static int const GRID_WIDTH = 37;
 static int const GRID_HEIGHT = 21;

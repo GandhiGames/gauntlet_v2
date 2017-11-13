@@ -47,7 +47,7 @@ public:
 	* @return True if the given tile is solid.
 	*/
 	bool IsSolid(int x, int y);
-	bool IsSolid(sf::Vector2f pos);
+	bool IsSolid(const sf::Vector2f& pos);
 	bool IsSolid(DungeonTile& tile);
 
 	bool CausesCollision(const sf::Vector2f& pos);
@@ -83,8 +83,6 @@ private:
 	std::map<DungeonTileType, sf::IntRect> m_spriteLookup;
 	
 	int m_tilesetID;
-
-	sf::Vector2f m_origin;
 
 	//Dungeon setup details
 	int m_transitionSteps;
