@@ -17,7 +17,8 @@ void S_Game::OnCreate()
 	sf::Vector2u size = m_stateManager->m_context->m_window->getSize();
 	m_view.setSize((float)size.x, (float)size.y);
 	m_view.setCenter(size.x / 2.f, size.y / 2.f);
-	m_view.zoom(1.5f);
+	//TODO: move to camera component.
+	m_view.zoom(0.8f);
 	m_stateManager->m_context->m_window->setView(m_view);
 
 	//m_level.GenerateLevel();
@@ -71,15 +72,16 @@ void S_Game::OnCreate()
 	//m_player->AddComponent<C_CollidableTest>();
 	//m_player->AddComponent<C_RaycastTest>();
 
-	//m_player->AddComponent<C_Camera>();
+	m_player->AddComponent<C_Camera>();
 
 	Object::Add(m_player);
 
 	// Player Hair
+	/*
 	auto hairObj = std::make_shared<Object>(*m_stateManager->m_context);
 	hairObj->m_transform->SetParent(m_player->m_transform);
 	auto hairSprite = hairObj->AddComponent<C_AnimatedSprite>();
-	hairSprite->SetSortOrder()
+	hairSprite->SetSortOrder(1001);
 
 	int hairTextureID = TextureManager::AddTexture("../resources/characters/character_hair_blonde_walk.png");
 	sf::Texture& hairTexture = TextureManager::GetTexture(walkTextureID);
@@ -92,6 +94,7 @@ void S_Game::OnCreate()
 	playerSprite->AddAnimation(ANIMATION_STATE::WALK_LEFT, walkLeft);
 	playerSprite->AddAnimation(ANIMATION_STATE::WALK_DOWN, walkDown);
 	playerSprite->AddAnimation(ANIMATION_STATE::WALK_RIGHT, walkRight);
+	*/
 
 	/*
 	auto shadow = std::make_shared<Object>(*m_stateManager->m_context);
@@ -106,7 +109,9 @@ void S_Game::OnCreate()
 	Object::Add(shadow);
 	*/
 
-
+	auto label = m_player->AddComponent<C_DebugPositionLabel>();
+	label->SetOffset(sf::Vector2f(0.f, -35.f));
+	label->SetSortOrder(1000);
 	/*******************
 	 Player setup end.
 	********************/

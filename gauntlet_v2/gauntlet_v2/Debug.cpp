@@ -9,8 +9,8 @@ bool Debug::m_drawGridCoordinates = false;
 
 void Debug::Initialise(SharedContext& context)
 {
-	//TODO: download font and test this.
-	//m_debugFont.loadFromFile("arial.ttf");
+	//TODO: create generic resource manager that includes fonts
+	m_debugFont.loadFromFile("../resources/fonts/Gisha.ttf");
 
 	auto level = context.m_level;
 	auto nodes = level->GetNodes();
@@ -22,12 +22,15 @@ void Debug::Initialise(SharedContext& context)
 		for (int y = 0; y < nodes.GetHeight(); y++)
 		{
 			auto tile = nodes.GetTile(x, y);
-			std::string textString = "test"; // x + ", " + y;
+			std::string textString = std::to_string(x) + "," + std::to_string(y);
 			sf::Text text(textString , m_debugFont);
-			text.setCharacterSize(30);
-			text.setStyle(sf::Text::Bold);
-			text.setFillColor(sf::Color::Red);
-			text.setPosition(level->GetTilePosition(x, y));
+			text.setCharacterSize(10);
+			//text.setStyle(sf::Text::Bold);
+			text.setFillColor(sf::Color::White);
+		
+			float tileHalf = DUNGEON_TILE_SIZE * 0.5f;
+			text.setPosition(level->GetTilePosition(x, y) + tile->sprite.getOrigin() + 
+				sf::Vector2f(tileHalf - ((text.getString().getSize() * text.getCharacterSize()) * 0.5f), tileHalf));
 
 			m_coordinateTexts.push_back(text);
 		}

@@ -67,6 +67,12 @@
     <Filter Include="Source Files\Components\Movement Behavior">
       <UniqueIdentifier>{580ac7aa-9cb6-433d-9e43-29aace64aac7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Debug">
+      <UniqueIdentifier>{44a3cb85-54ed-42be-a849-92a3c82e68dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Debug">
+      <UniqueIdentifier>{6f75615f-6bf8-42f7-8563-b2756a4ce794}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object.h">
@@ -159,9 +165,6 @@
     <ClInclude Include="RaycastResult.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Debug.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="C_RaycastTest.h">
       <Filter>Header Files\Components\Test</Filter>
     </ClInclude>
@@ -200,6 +203,12 @@
     </ClInclude>
     <ClInclude Include="Animation.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>Header Files\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="C_DebugPositionLabel.h">
+      <Filter>Header Files\Debug</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -278,9 +287,6 @@
     <ClCompile Include="Raycast.cpp">
       <Filter>Source Files\Raycast</Filter>
     </ClCompile>
-    <ClCompile Include="Debug.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="C_RaycastTest.cpp">
       <Filter>Source Files\Components\Test</Filter>
     </ClCompile>
@@ -319,6 +325,12 @@
     </ClCompile>
     <ClCompile Include="Animation.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug.cpp">
+      <Filter>Source Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="C_DebugPositionLabel.cpp">
+      <Filter>Source Files\Debug</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

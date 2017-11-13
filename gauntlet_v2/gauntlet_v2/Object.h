@@ -24,6 +24,7 @@
 #include "C_MovementBehavior.h"
 #include "C_Seperation.h"
 #include "C_BehaviorApplier.h"
+#include "C_DebugPositionLabel.h"
 
 class Object
 {

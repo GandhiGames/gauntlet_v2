@@ -89,6 +89,10 @@ sf::Vector2i DungeonGenerator::GetSize() const
 	return sf::Vector2i(DUNGEON_WIDTH, DUNGEON_HEIGHT);
 }
 
+bool DungeonGenerator::IsSolid(DungeonTile& tile)
+{
+	return tile.type != DungeonTileType::Floor;
+}
 
 bool DungeonGenerator::IsSolid(int i, int j)
 {
@@ -96,11 +100,10 @@ bool DungeonGenerator::IsSolid(int i, int j)
 
 	if (node)
 	{
-		return node->type != DungeonTileType::Floor;
+		return IsSolid(*node);
 	}
 		
 	return false;
-
 }
 
 bool DungeonGenerator::IsSolid(sf::Vector2f pos)
@@ -124,7 +127,7 @@ bool DungeonGenerator::CausesCollision(const sf::Vector2f& newPosition)
 	DungeonTile* overlappingTiles[4];
 
 	//TODO: move this! calculate on a per sprite basis.
-	const float characterSize = 15.f;
+	const float characterSize = 7.f;
 
 	// Top left.
 	overlappingTiles[0] = m_nodes.GetTile(sf::Vector2f(newPosition.x - characterSize, newPosition.y - characterSize));
@@ -141,9 +144,8 @@ bool DungeonGenerator::CausesCollision(const sf::Vector2f& newPosition)
 	// If any of the overlapping tiles are solid there was a collision.
 	for (int i = 0; i < 4; i++)
 	{
-		if (IsSolid(overlappingTiles[i]->x, overlappingTiles[i]->y))
+		if (IsSolid(*overlappingTiles[i]))
 		{
-
 			return true;
 		}
 	}

@@ -48,6 +48,7 @@ public:
 	*/
 	bool IsSolid(int x, int y);
 	bool IsSolid(sf::Vector2f pos);
+	bool IsSolid(DungeonTile& tile);
 
 	bool CausesCollision(const sf::Vector2f& pos);
 
