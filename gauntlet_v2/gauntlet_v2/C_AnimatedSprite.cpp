@@ -17,7 +17,7 @@ void C_AnimatedSprite::LateUpdate(float deltaTime)
 {
 	if (m_curAnimation)
 	{
-		m_curAnimation->m_sprite.setPosition(m_owner->m_transform->GetPosition());
+		m_curAnimation->Update(m_owner->m_transform->GetPosition());
 	}
 }
 
@@ -30,9 +30,9 @@ void C_AnimatedSprite::Draw(sf::RenderWindow &window, float timeDelta)
 	}
 }
 
-void C_AnimatedSprite::AddAnimation(ANIMATION_STATE state, Animation animation)
+void C_AnimatedSprite::AddAnimation(ANIMATION_STATE state, AnimationGroup& animationGroup)
 {
-	auto inserted = m_animations.insert(std::make_pair(state, std::make_shared<Animation>(animation)));
+	auto inserted = m_animations.insert(std::make_pair(state, std::make_shared<AnimationGroup>(animationGroup)));
 
 	if (!m_curAnimation)
 	{
@@ -67,6 +67,7 @@ bool C_AnimatedSprite::IsAnimated()
 	return m_animated;
 }
 
+/*
 const sf::Sprite* C_AnimatedSprite::GetSprite()
 {
 	if (m_curAnimation)
@@ -76,3 +77,4 @@ const sf::Sprite* C_AnimatedSprite::GetSprite()
 
 	return nullptr;
 }
+*/

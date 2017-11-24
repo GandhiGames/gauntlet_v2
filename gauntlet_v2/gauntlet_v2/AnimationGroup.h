@@ -1,6 +1,6 @@
 #pragma once
 
-#include <map>
+#include <memory>
 
 #include "Animation.h"
 #include "Util.h"
@@ -11,9 +11,14 @@ public:
 	AnimationGroup();
 	~AnimationGroup();
 
-	void AddAnimation(MOVEMENT_DIRECTION dir, Animation animation);
+	void AddAnimation(Animation& animation);
+
+	void Draw(sf::RenderWindow &window, float timeDelta);
+	void Update(const sf::Vector2f pos);
+	void Reset();
 
 private:
-	std::map<MOVEMENT_DIRECTION, Animation> m_animations;
+	//TODO: get rid of the outdated m_ notation!
+	std::vector<std::shared_ptr<Animation>> m_animations;
 };
 

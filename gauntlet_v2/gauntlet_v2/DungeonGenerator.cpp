@@ -126,23 +126,30 @@ bool DungeonGenerator::CausesCollision(const sf::Vector2f& newPosition)
 	DungeonTile* overlappingTiles[4];
 
 	//TODO: calculate on a per sprite basis.
-	const float characterSize = 7.f;
+	const float characterSize = 16.f;
+
+	sf::Vector2f pos = newPosition;
+	pos.x -= characterSize;
+	pos.y -= characterSize;
 
 	// Top left.
-	overlappingTiles[0] = m_nodes.GetTile(sf::Vector2f(newPosition.x - characterSize, newPosition.y - characterSize));
+	overlappingTiles[0] = m_nodes.GetTile(sf::Vector2f(pos.x - characterSize, pos.y - characterSize));
 
 	// Top right.
-	overlappingTiles[1] = m_nodes.GetTile(sf::Vector2f(newPosition.x + characterSize, newPosition.y - characterSize));
+	overlappingTiles[1] = m_nodes.GetTile(sf::Vector2f(pos.x + characterSize, pos.y - characterSize));
 
 	// Bottom left.
-	overlappingTiles[2] = m_nodes.GetTile(sf::Vector2f(newPosition.x - characterSize, newPosition.y + characterSize));
+	overlappingTiles[2] = m_nodes.GetTile(sf::Vector2f(pos.x - characterSize, pos.y + characterSize));
 
 	// Bottom right.
-	overlappingTiles[3] = m_nodes.GetTile(sf::Vector2f(newPosition.x + characterSize, newPosition.y + characterSize));
+	overlappingTiles[3] = m_nodes.GetTile(sf::Vector2f(pos.x + characterSize, pos.y + characterSize));
 
 	// If any of the overlapping tiles are solid there was a collision.
 	for (int i = 0; i < 4; i++)
 	{
+		//Debug::DrawRect(GetTilePosition(overlappingTiles[i]->x, overlappingTiles[i]->y),
+		//	sf::Vector2f(DUNGEON_TILE_SIZE, DUNGEON_TILE_SIZE), sf::Color::White);
+
 		if (IsSolid(*overlappingTiles[i]))
 		{
 			Debug::DrawRect(GetTilePosition(overlappingTiles[i]->x, overlappingTiles[i]->y),

@@ -16,6 +16,7 @@ public:
 
 	void Reset();
 
+	//TODO: make all bellow private.
 	sf::Sprite m_sprite;
 
 	float m_timeDelta;

@@ -35,7 +35,6 @@ void Animation::Draw(sf::RenderWindow &window, float timeDelta)
 		m_timeDelta = 0;
 	}
 
-
 	window.draw(m_sprite);
 }
 

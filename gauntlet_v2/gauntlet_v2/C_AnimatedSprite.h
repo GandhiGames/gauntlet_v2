@@ -5,7 +5,7 @@
 #include "C_Drawable.h"
 #include "C_Updateable.h"
 #include "C_Transform.h"
-#include "Animation.h"
+#include "AnimationGroup.h"
 #include "Util.h"
 
 class C_AnimatedSprite : public Component, public C_Drawable, public C_Updateable
@@ -21,18 +21,18 @@ public:
 	virtual void Draw(sf::RenderWindow &window, float timeDelta) override;
 
 	//TODO: look into optomising pass by-reference? convert to data only struct?
-	void AddAnimation(ANIMATION_STATE state, Animation animation);
+	void AddAnimation(ANIMATION_STATE state, AnimationGroup& animationGroup);
 	void SetCurrentAnimation(ANIMATION_STATE state);
 
-	const sf::Sprite* GetSprite();
+	//const sf::Sprite* GetSprite();
 
 	void SetAnimated(bool animated);
 
 	bool IsAnimated();
 private:
-	std::map<ANIMATION_STATE, std::shared_ptr<Animation>> m_animations;
+	std::map<ANIMATION_STATE, std::shared_ptr<AnimationGroup>> m_animations;
 	
-	std::shared_ptr<Animation> m_curAnimation;
+	std::shared_ptr<AnimationGroup> m_curAnimation;
 
 	bool m_animated;
 };
