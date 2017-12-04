@@ -25,6 +25,7 @@
 #include "C_Seperation.h"
 #include "C_BehaviorApplier.h"
 #include "C_DebugPositionLabel.h"
+#include "C_MeleeAttack.h"
 
 class Object
 {
@@ -35,11 +36,10 @@ public:
 	*/
 	Object(SharedContext& context);
 
-	/**
-	* Updates the game object. Called once per tick.
-	* @param timeDelta The time elapsed since the last tick in MS.
-	*/
-	virtual void Update(float timeDelta);
+	void Awake();
+	void Start();
+
+	void Update(float timeDelta);
 
 	void Draw(sf::RenderWindow &window, float timeDelta);
 
@@ -185,7 +185,6 @@ private:
 		}
 	};
 
-private:
 	std::vector<std::shared_ptr<Component>> m_components;
 
 	//Maintain seperate lists for components that require updating/drawing.
@@ -199,4 +198,8 @@ private:
 	// Do not add directly to m_objects. Add to m_newObjects instead and they are moved over at frame end.
 	static std::vector<std::shared_ptr<Object>> m_newObjects;
 	static std::vector<std::shared_ptr<Object>> m_objects;
+
+private:
+	static void AwakeNew();
+	static void StartNew();
 };

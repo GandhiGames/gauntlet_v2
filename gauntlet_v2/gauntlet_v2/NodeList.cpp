@@ -60,10 +60,14 @@ DungeonTile* NodeList::GetTile(const sf::Vector2f& position)
 	tileRow = static_cast<int>(pos.y) / DUNGEON_TILE_SIZE;
 	*/
 	// Convert to a tile position.
-	int tileColumn = (static_cast<int>(position.x - m_offset.x)) / DUNGEON_TILE_SIZE;
-	int tileRow = (static_cast<int>(position.y - m_offset.y)) / DUNGEON_TILE_SIZE;
+	//int tileColumn = (static_cast<int>(position.x - m_offset.x)) / DUNGEON_TILE_SIZE;
+	//int tileRow = (static_cast<int>(position.y - m_offset.y)) / DUNGEON_TILE_SIZE;
 
-	return GetTile(tileColumn, tileRow);
+	int tx = floor((position.x - m_offset.x) / DUNGEON_TILE_SIZE);
+	int ty = floor((position.y - m_offset.y) / DUNGEON_TILE_SIZE);
+		
+
+	return GetTile(tx, ty);
 }
 
 DungeonTile* NodeList::GetTile(int x, int y)

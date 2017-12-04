@@ -11,11 +11,25 @@ Object::Object(SharedContext& context) : m_queuedForRemoval(false), m_context(co
 	m_tag = AddComponent<C_Tag>();
 }
 
+void Object::Awake()
+{
+	for (auto& c : m_components)
+	{
+		c->Awake();
+	}
+}
+
+void Object::Start()
+{
+	for (auto& c : m_components)
+	{
+		c->Start();
+	}
+}
+
 void Object::Update(float timeDelta)
 {
-	//TODO: cache updateables
-	auto updateables = GetComponents<C_Updateable>();
-	for (const auto& component : updateables)
+	for (const auto& component : m_updatables)
 	{
 		component->Update(timeDelta);
 	}
@@ -119,6 +133,7 @@ void Object::Add(std::shared_ptr<Object> object)
 	m_newObjects.push_back(object);
 }
 
+//TODO: cache?
 std::vector<std::shared_ptr<Object>> Object::GetObjectsWithTag(const std::string& tag)
 {
 	std::vector<std::shared_ptr<Object>> retObjects;
@@ -144,6 +159,9 @@ void Object::ProcessNewObjects()
 	// Move newly created objects to global list.
 	if (m_newObjects.size() > 0)
 	{
+		AwakeNew();
+		StartNew();
+
 		for (auto& obj : m_newObjects)
 		{
 			Object::m_objects.push_back(obj);
@@ -158,6 +176,22 @@ void Object::ProcessNewObjects()
 std::vector<std::shared_ptr<Object>> Object::GetNewObjects()
 {
 	return m_newObjects;
+}
+
+void Object::AwakeNew()
+{
+	for (const auto& obj : m_newObjects)
+	{
+		obj->Awake();
+	}
+}
+
+void Object::StartNew()
+{
+	for (const auto& obj : m_newObjects)
+	{
+		obj->Start();
+	}
 }
 
 void Object::UpdateAll(float deltaTime)

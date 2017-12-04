@@ -1,12 +1,9 @@
 #include "C_AnimatedSprite.h"
-
 #include "Object.h"
 
 C_AnimatedSprite::C_AnimatedSprite(Object* owner) : Component(owner),
 m_animated(false)
 {
-	//TODO: test this works, implement more error checking.
-	assert(owner->GetComponents<C_Drawable>().size() == 0);
 }
 
 C_AnimatedSprite::~C_AnimatedSprite()

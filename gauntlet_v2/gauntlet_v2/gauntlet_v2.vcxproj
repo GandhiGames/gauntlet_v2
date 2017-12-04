@@ -131,6 +131,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="AnimationFactory.h" />
     <ClInclude Include="AnimationGroup.h" />
     <ClInclude Include="Bitmask.h" />
     <ClInclude Include="CollisionResolver.h" />
@@ -144,10 +145,12 @@
     <ClInclude Include="C_CollidableTest.h" />
     <ClInclude Include="C_Collider2D.h" />
     <ClInclude Include="C_DebugPositionLabel.h" />
+    <ClInclude Include="C_Direction.h" />
     <ClInclude Include="C_DirectionalAnimation.h" />
     <ClInclude Include="C_Drawable.h" />
     <ClInclude Include="C_InstanceID.h" />
     <ClInclude Include="C_KeyboardController.h" />
+    <ClInclude Include="C_MeleeAttack.h" />
     <ClInclude Include="C_Velocity.h" />
     <ClInclude Include="C_MovementBehavior.h" />
     <ClInclude Include="C_PathFinding.h" />
@@ -179,6 +182,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="AnimationFactory.cpp" />
     <ClCompile Include="AnimationGroup.cpp" />
     <ClCompile Include="CollisionResolver.cpp" />
     <ClCompile Include="C_AnimatedSprite.cpp" />
@@ -190,10 +194,12 @@
     <ClCompile Include="C_CollidableTest.cpp" />
     <ClCompile Include="C_Collider2D.cpp" />
     <ClCompile Include="C_DebugPositionLabel.cpp" />
+    <ClCompile Include="C_Direction.cpp" />
     <ClCompile Include="C_DirectionalAnimation.cpp" />
     <ClCompile Include="C_Drawable.cpp" />
     <ClCompile Include="C_InstanceID.cpp" />
     <ClCompile Include="C_KeyboardController.cpp" />
+    <ClCompile Include="C_MeleeAttack.cpp" />
     <ClCompile Include="C_Velocity.cpp" />
     <ClCompile Include="C_MovementBehavior.cpp" />
     <ClCompile Include="C_PathFinding.cpp" />

@@ -13,5 +13,5 @@ public:
 	C_RaycastTest(Object* owner);
 	void Update(float deltaTime) override;
 private:
-	sf::Vector2f toOffset;
+	sf::Vector2f m_toOffset;
 };

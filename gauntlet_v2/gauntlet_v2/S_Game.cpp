@@ -45,150 +45,173 @@ void S_Game::OnCreate()
 	const int animationSpeed = 14;
 	const int startFrame = 1;
 	const int endFrame = 9;
+	const int spriteSize = 64;
+	
+	//TODO: Need to be able to easily swap out animations e.g. you want to be able to change armour/sword parts easily.
+	std::map<MOVEMENT_DIRECTION, AnimationGroup> walkAnimationGroups;
+	walkAnimationGroups.emplace(std::make_pair(MOVEMENT_DIRECTION::UP, AnimationGroup()));
+	walkAnimationGroups.emplace(std::make_pair(MOVEMENT_DIRECTION::DOWN, AnimationGroup()));
+	walkAnimationGroups.emplace(std::make_pair(MOVEMENT_DIRECTION::LEFT, AnimationGroup()));
+	walkAnimationGroups.emplace(std::make_pair(MOVEMENT_DIRECTION::RIGHT, AnimationGroup()));
+
+	std::map<MOVEMENT_DIRECTION, AnimationGroup> idleAnimationGroups;
+	idleAnimationGroups.emplace(std::make_pair(MOVEMENT_DIRECTION::UP, AnimationGroup()));
+	idleAnimationGroups.emplace(std::make_pair(MOVEMENT_DIRECTION::DOWN, AnimationGroup()));
+	idleAnimationGroups.emplace(std::make_pair(MOVEMENT_DIRECTION::LEFT, AnimationGroup()));
+	idleAnimationGroups.emplace(std::make_pair(MOVEMENT_DIRECTION::RIGHT, AnimationGroup()));
+
+	std::map<MOVEMENT_DIRECTION, AnimationGroup> meleeAttackAnimationGroups;
+	meleeAttackAnimationGroups.emplace(std::make_pair(MOVEMENT_DIRECTION::UP, AnimationGroup()));
+	meleeAttackAnimationGroups.emplace(std::make_pair(MOVEMENT_DIRECTION::DOWN, AnimationGroup()));
+	meleeAttackAnimationGroups.emplace(std::make_pair(MOVEMENT_DIRECTION::LEFT, AnimationGroup()));
+	meleeAttackAnimationGroups.emplace(std::make_pair(MOVEMENT_DIRECTION::RIGHT, AnimationGroup()));
+
 	/* Body Animatons */
-	int walkTextureID = TextureManager::AddTexture("../resources/characters/character_male_walk.png");
-	sf::Texture& walkTexture = TextureManager::GetTexture(walkTextureID);
-
-	Animation walkUp(walkTexture, 0, 64, 64, startFrame, endFrame, animationSpeed);
-	Animation walkLeft(walkTexture, 1, 64, 64, startFrame, endFrame, animationSpeed);
-	Animation walkDown(walkTexture, 2, 64, 64, startFrame, endFrame, animationSpeed);
-	Animation walkRight(walkTexture, 3, 64, 64, startFrame, endFrame, animationSpeed);
-
-	Animation idleUp(walkTexture, 0, 64, 64, 0, 0, 0);
-	Animation idleLeft(walkTexture, 1, 64, 64, 0, 0, 0);
-	Animation idleDown(walkTexture, 2, 64, 64, 0, 0, 0);
-	Animation idleRight(walkTexture, 3, 64, 64, 0, 0, 0);
+	int walkTextureID = TextureManager::AddTexture(BODY_PARTS_ROOT_FOLDER + "body/male_1/walk.png");
+	auto bodyWalkAnimations = AnimationFactory::CreateAnimations(walkTextureID, startFrame, endFrame, animationSpeed, spriteSize);
+	for (auto a : *bodyWalkAnimations)
+	{
+		walkAnimationGroups[a.first].AddAnimation(a.second);
+	}
+	
+	auto bodyIdleAnimations = AnimationFactory::CreateAnimations(walkTextureID, 0, 0, 0, spriteSize);
+	for (auto a : *bodyIdleAnimations)
+	{
+		idleAnimationGroups[a.first].AddAnimation(a.second);
+	}
 
 	/* Hair Animations */
-	int hairTextureID = TextureManager::AddTexture("../resources/characters/character_hair_blonde_walk.png");
-	sf::Texture& hairTexture = TextureManager::GetTexture(hairTextureID);
+	int hairTextureID = TextureManager::AddTexture(BODY_PARTS_ROOT_FOLDER + "hair/blonde/walk.png");
+	auto hairWalkAnimations = AnimationFactory::CreateAnimations(hairTextureID, startFrame, endFrame, animationSpeed, spriteSize);
+	for (auto a : *hairWalkAnimations)
+	{
+		walkAnimationGroups[a.first].AddAnimation(a.second);
+	}
 
-	Animation hairWalkUp(hairTexture, 0, 64, 64, startFrame, endFrame, animationSpeed);
-	Animation hairWalkLeft(hairTexture, 1, 64, 64, startFrame, endFrame, animationSpeed);
-	Animation hairWalkDown(hairTexture, 2, 64, 64, startFrame, endFrame, animationSpeed);
-	Animation hairWalkRight(hairTexture, 3, 64, 64, startFrame, endFrame, animationSpeed);
-
-	Animation hairIdleUp(hairTexture, 0, 64, 64, 0, 0, 0);
-	Animation hairIdleLeft(hairTexture, 1, 64, 64, 0, 0, 0);
-	Animation hairIdleDown(hairTexture, 2, 64, 64, 0, 0, 0);
-	Animation hairIdleRight(hairTexture, 3, 64, 64, 0, 0, 0);
+	auto hairIdleAnimations = AnimationFactory::CreateAnimations(hairTextureID, 0, 0, 0, spriteSize);
+	for (auto a : *hairIdleAnimations)
+	{
+		idleAnimationGroups[a.first].AddAnimation(a.second);
+	}
 
 	/* Pants Animations */
-	int pantsTextureID = TextureManager::AddTexture("../resources/characters/character_pants_green_walk.png");
-	sf::Texture& pantsTexture = TextureManager::GetTexture(pantsTextureID);
+	int pantsTextureID = TextureManager::AddTexture(BODY_PARTS_ROOT_FOLDER + "pants/green/walk.png");
+	auto pantsWalkAnimations = AnimationFactory::CreateAnimations(pantsTextureID, startFrame, endFrame, animationSpeed, spriteSize);
+	for (auto a : *pantsWalkAnimations)
+	{
+		walkAnimationGroups[a.first].AddAnimation(a.second);
+	}
 
-	Animation pantsWalkUp(pantsTexture, 0, 64, 64, startFrame, endFrame, animationSpeed);
-	Animation pantsWalkLeft(pantsTexture, 1, 64, 64, startFrame, endFrame, animationSpeed);
-	Animation pantsWalkDown(pantsTexture, 2, 64, 64, startFrame, endFrame, animationSpeed);
-	Animation pantsWalkRight(pantsTexture, 3, 64, 64, startFrame, endFrame, animationSpeed);
+	auto pantsIdleAnimations = AnimationFactory::CreateAnimations(pantsTextureID, 0, 0, 0, spriteSize);
+	for (auto a : *pantsIdleAnimations)
+	{
+		idleAnimationGroups[a.first].AddAnimation(a.second);
+	}
 
-	Animation pantsIdleUp(pantsTexture, 0, 64, 64, 0, 0, 0);
-	Animation pantsIdleLeft(pantsTexture, 1, 64, 64, 0, 0, 0);
-	Animation pantsIdleDown(pantsTexture, 2, 64, 64, 0, 0, 0);
-	Animation pantsIdleRight(pantsTexture, 3, 64, 64, 0, 0, 0);
 
 	/* Shirt Animations */
-	int shirtTextureID = TextureManager::AddTexture("../resources/characters/charactera_leather_armor_shirt_white_walk.png");
-	sf::Texture& shirtsTexture = TextureManager::GetTexture(shirtTextureID);
+	int shirtTextureID = TextureManager::AddTexture(BODY_PARTS_ROOT_FOLDER + "shirt/leather_white/walk.png");
+	
+	auto shirtWalkAnimations = AnimationFactory::CreateAnimations(shirtTextureID, startFrame, endFrame, animationSpeed, spriteSize);
+	for (auto a : *shirtWalkAnimations)
+	{
+		walkAnimationGroups[a.first].AddAnimation(a.second);
+	}
 
-	Animation shirtWalkUp(shirtsTexture, 0, 64, 64, startFrame, endFrame, animationSpeed);
-	Animation shirtWalkLeft(shirtsTexture, 1, 64, 64, startFrame, endFrame, animationSpeed);
-	Animation shirtWalkDown(shirtsTexture, 2, 64, 64, startFrame, endFrame, animationSpeed);
-	Animation shirtWalkRight(shirtsTexture, 3, 64, 64, startFrame, endFrame, animationSpeed);
-
-	Animation shirtIdleUp(shirtsTexture, 0, 64, 64, 0, 0, 0);
-	Animation shirtIdleLeft(shirtsTexture, 1, 64, 64, 0, 0, 0);
-	Animation shirtIdleDown(shirtsTexture, 2, 64, 64, 0, 0, 0);
-	Animation shirtIdleRight(shirtsTexture, 3, 64, 64, 0, 0, 0);
+	auto shirtIdleAnimations = AnimationFactory::CreateAnimations(shirtTextureID, 0, 0, 0, spriteSize);
+	for (auto a : *shirtIdleAnimations)
+	{
+		idleAnimationGroups[a.first].AddAnimation(a.second);
+	}
 
 	/* Shoes Animation */
-	int shoesTextureID = TextureManager::AddTexture("../resources/characters/character_shoes_brown_walk.png");
-	sf::Texture& shoesTexture = TextureManager::GetTexture(shoesTextureID);
+	int shoesTextureID = TextureManager::AddTexture(BODY_PARTS_ROOT_FOLDER + "shoes/brown/walk.png");
+	auto shoesWalkAnimations = AnimationFactory::CreateAnimations(shoesTextureID, startFrame, endFrame, animationSpeed, spriteSize);
+	for (auto a : *shoesWalkAnimations)
+	{
+		walkAnimationGroups[a.first].AddAnimation(a.second);
+	}
 
-	Animation shoesWalkUp(shoesTexture, 0, 64, 64, startFrame, endFrame, animationSpeed);
-	Animation shoesWalkLeft(shoesTexture, 1, 64, 64, startFrame, endFrame, animationSpeed);
-	Animation shoesWalkDown(shoesTexture, 2, 64, 64, startFrame, endFrame, animationSpeed);
-	Animation shoesWalkRight(shoesTexture, 3, 64, 64, startFrame, endFrame, animationSpeed);
+	auto shoesIdleAnimations = AnimationFactory::CreateAnimations(shoesTextureID, 0, 0, 0, spriteSize);
+	for (auto a : *shoesIdleAnimations)
+	{
+		idleAnimationGroups[a.first].AddAnimation(a.second);
+	}
 
-	Animation shoesIdleUp(shoesTexture, 0, 64, 64, 0, 0, 0);
-	Animation shoesIdleLeft(shoesTexture, 1, 64, 64, 0, 0, 0);
-	Animation shoesIdleDown(shoesTexture, 2, 64, 64, 0, 0, 0);
-	Animation shoesIdleRight(shoesTexture, 3, 64, 64, 0, 0, 0);
+	/* Sword Animations */
+	int swingBodyTextureID = TextureManager::AddTexture(BODY_PARTS_ROOT_FOLDER + "body/male_1/swing.png");
+	auto swingBodyAttackAnimations = AnimationFactory::CreateAnimations(swingBodyTextureID, 0, 5, animationSpeed, spriteSize);
+	for (auto a : *swingBodyAttackAnimations)
+	{
+		meleeAttackAnimationGroups[a.first].AddAnimation(a.second);
+	}
 
-	// Group Animations
-	AnimationGroup playerWalkUp;
-	playerWalkUp.AddAnimation(walkUp);
-	playerWalkUp.AddAnimation(hairWalkUp);
-	playerWalkUp.AddAnimation(pantsWalkUp);
-	playerWalkUp.AddAnimation(shirtWalkUp);
-	playerWalkUp.AddAnimation(shoesWalkUp);
-	AnimationGroup playerWalkLeft;
-	playerWalkLeft.AddAnimation(walkLeft);
-	playerWalkLeft.AddAnimation(hairWalkLeft);
-	playerWalkLeft.AddAnimation(pantsWalkLeft);
-	playerWalkLeft.AddAnimation(shirtWalkLeft);
-	playerWalkLeft.AddAnimation(shoesWalkLeft);
-	AnimationGroup playerWalkRight;
-	playerWalkRight.AddAnimation(walkRight);
-	playerWalkRight.AddAnimation(hairWalkRight);
-	playerWalkRight.AddAnimation(pantsWalkRight);
-	playerWalkRight.AddAnimation(shirtWalkRight);
-	playerWalkRight.AddAnimation(shoesWalkRight);
-	AnimationGroup playerWalkDown;
-	playerWalkDown.AddAnimation(walkDown);
-	playerWalkDown.AddAnimation(hairWalkDown);
-	playerWalkDown.AddAnimation(pantsWalkDown);
-	playerWalkDown.AddAnimation(shirtWalkDown);
-	playerWalkDown.AddAnimation(shoesWalkDown);
+	int swordTextureID = TextureManager::AddTexture("../resources/weapons/sword.png");
+	auto swordAttackAnimations = AnimationFactory::CreateAnimations(swordTextureID, 0, 5, animationSpeed, 128);
+	for (auto a : *swordAttackAnimations)
+	{
+		meleeAttackAnimationGroups[a.first].AddAnimation(a.second);
+	}
 
-	AnimationGroup playerIdleUp;
-	playerIdleUp.AddAnimation(idleUp);
-	playerIdleUp.AddAnimation(hairIdleUp);
-	playerIdleUp.AddAnimation(pantsIdleUp);
-	playerIdleUp.AddAnimation(shirtIdleUp);
-	playerIdleUp.AddAnimation(shoesIdleUp);
-	AnimationGroup playerIdleLeft;
-	playerIdleLeft.AddAnimation(idleLeft);
-	playerIdleLeft.AddAnimation(hairIdleLeft);
-	playerIdleLeft.AddAnimation(pantsIdleLeft);
-	playerIdleLeft.AddAnimation(shirtIdleLeft);
-	playerIdleLeft.AddAnimation(shoesIdleLeft);
-	AnimationGroup playerIdleRight;
-	playerIdleRight.AddAnimation(idleRight);
-	playerIdleRight.AddAnimation(hairIdleRight);
-	playerIdleRight.AddAnimation(pantsIdleRight);
-	playerIdleRight.AddAnimation(shirtIdleRight);
-	playerIdleRight.AddAnimation(shoesIdleRight);
-	AnimationGroup playerIdleDown;
-	playerIdleDown.AddAnimation(idleDown);
-	playerIdleDown.AddAnimation(hairIdleDown);
-	playerIdleDown.AddAnimation(pantsIdleDown);
-	playerIdleDown.AddAnimation(shirtIdleDown);
-	playerIdleDown.AddAnimation(shoesIdleDown);
+	int swingShoesTextureID = TextureManager::AddTexture(BODY_PARTS_ROOT_FOLDER + "shoes/brown/swing.png");
+	auto swingShoesAttackAnimations = AnimationFactory::CreateAnimations(swingShoesTextureID, 0, 5, animationSpeed, spriteSize);
+	for (auto a : *swingShoesAttackAnimations)
+	{
+		meleeAttackAnimationGroups[a.first].AddAnimation(a.second);
+	}
 
-	playerSprite->AddAnimation(ANIMATION_STATE::WALK_UP, playerWalkUp);
-	playerSprite->AddAnimation(ANIMATION_STATE::WALK_LEFT, playerWalkLeft);
-	playerSprite->AddAnimation(ANIMATION_STATE::WALK_DOWN, playerWalkDown);
-	playerSprite->AddAnimation(ANIMATION_STATE::WALK_RIGHT, playerWalkRight);
+	int swingHairTextureID = TextureManager::AddTexture(BODY_PARTS_ROOT_FOLDER + "hair/blonde/swing.png");
+	auto swingHairAttackAnimations = AnimationFactory::CreateAnimations(swingHairTextureID, 0, 5, animationSpeed, spriteSize);
+	for (auto a : *swingHairAttackAnimations)
+	{
+		meleeAttackAnimationGroups[a.first].AddAnimation(a.second);
+	}
+
+	int swingPantsTextureID = TextureManager::AddTexture(BODY_PARTS_ROOT_FOLDER + "pants/green/swing.png");
+	auto swingPantsAttackAnimations = AnimationFactory::CreateAnimations(swingPantsTextureID, 0, 5, animationSpeed, spriteSize);
+	for (auto a : *swingPantsAttackAnimations)
+	{
+		meleeAttackAnimationGroups[a.first].AddAnimation(a.second);
+	}
+
+	int swingshirtTextureID = TextureManager::AddTexture(BODY_PARTS_ROOT_FOLDER + "shirt/leather_white/swing.png");
+	auto swingShirtAttackAnimations = AnimationFactory::CreateAnimations(swingshirtTextureID, 0, 5, animationSpeed, spriteSize);
+	for (auto a : *swingShirtAttackAnimations)
+	{
+		meleeAttackAnimationGroups[a.first].AddAnimation(a.second);
+	}
 
 
-	playerSprite->AddAnimation(ANIMATION_STATE::IDLE_UP, playerIdleUp);
-	playerSprite->AddAnimation(ANIMATION_STATE::IDLE_LEFT, playerIdleLeft);
-	playerSprite->AddAnimation(ANIMATION_STATE::IDLE_DOWN, playerIdleDown);
-	playerSprite->AddAnimation(ANIMATION_STATE::IDLE_RIGHT, playerIdleRight);
+
+	playerSprite->AddAnimation(ANIMATION_STATE::WALK_UP, walkAnimationGroups[MOVEMENT_DIRECTION::UP]);
+	playerSprite->AddAnimation(ANIMATION_STATE::WALK_LEFT, walkAnimationGroups[MOVEMENT_DIRECTION::LEFT]);
+	playerSprite->AddAnimation(ANIMATION_STATE::WALK_DOWN, walkAnimationGroups[MOVEMENT_DIRECTION::DOWN]);
+	playerSprite->AddAnimation(ANIMATION_STATE::WALK_RIGHT, walkAnimationGroups[MOVEMENT_DIRECTION::RIGHT]);
+
+	playerSprite->AddAnimation(ANIMATION_STATE::IDLE_UP, idleAnimationGroups[MOVEMENT_DIRECTION::UP]);
+	playerSprite->AddAnimation(ANIMATION_STATE::IDLE_LEFT, idleAnimationGroups[MOVEMENT_DIRECTION::LEFT]);
+	playerSprite->AddAnimation(ANIMATION_STATE::IDLE_DOWN, idleAnimationGroups[MOVEMENT_DIRECTION::DOWN]);
+	playerSprite->AddAnimation(ANIMATION_STATE::IDLE_RIGHT, idleAnimationGroups[MOVEMENT_DIRECTION::RIGHT]);
+
+	playerSprite->AddAnimation(ANIMATION_STATE::SWING_UP, meleeAttackAnimationGroups[MOVEMENT_DIRECTION::UP]);
+	playerSprite->AddAnimation(ANIMATION_STATE::SWING_LEFT, meleeAttackAnimationGroups[MOVEMENT_DIRECTION::LEFT]);
+	playerSprite->AddAnimation(ANIMATION_STATE::SWING_DOWN, meleeAttackAnimationGroups[MOVEMENT_DIRECTION::DOWN]);
+	playerSprite->AddAnimation(ANIMATION_STATE::SWING_RIGHT, meleeAttackAnimationGroups[MOVEMENT_DIRECTION::RIGHT]);
 
 	playerSprite->SetSortOrder(1000);
 
 	m_player->AddComponent<C_DirectionalAnimation>();
 
 	auto collider1 = m_player->AddComponent<C_BoxCollider>();
-	collider1->SetCollidable(sf::FloatRect(walkDown.m_sprite.getGlobalBounds()));
+	collider1->SetCollidable(sf::FloatRect(bodyWalkAnimations->at(MOVEMENT_DIRECTION::DOWN).m_sprite.getGlobalBounds()));
 	collider1->SetLayer(CollisionLayer::Player);
 
 	//m_player->AddComponent<C_CollidableTest>();
-	//m_player->AddComponent<C_RaycastTest>();
+	m_player->AddComponent<C_RaycastTest>();
 
 	m_player->AddComponent<C_Camera>();
+	m_player->AddComponent<C_MeleeAttack>();
+	m_player->AddComponent<C_Direction>();
 
 	Object::Add(m_player);
 
@@ -200,7 +223,7 @@ void S_Game::OnCreate()
 	 Player setup end.
 	********************/
 
-	/*
+
 	for (int i = 0; i < 10; ++i)
 	{
 		auto follower = std::make_shared<Object>(*m_stateManager->m_context);
@@ -208,27 +231,115 @@ void S_Game::OnCreate()
 		follower->m_tag->Set(FOLLOWER_TAG);
 
 		auto objSprite = follower->AddComponent<C_AnimatedSprite>();
-		objSprite->SetSprite(TextureManager::GetTexture(textureID), false, 0, 32, 32, 8, 10);
-		objSprite->SetSortOrder(0);
-		objSprite->SetScale(sf::Vector2f(.5f, .5f));
 
-		follower->m_transform->SetPosition(m_level.GetRandomSpawnLocation());
+		std::map<MOVEMENT_DIRECTION, AnimationGroup> objWalkAnimationGroups;
+		objWalkAnimationGroups.emplace(std::make_pair(MOVEMENT_DIRECTION::UP, AnimationGroup()));
+		objWalkAnimationGroups.emplace(std::make_pair(MOVEMENT_DIRECTION::DOWN, AnimationGroup()));
+		objWalkAnimationGroups.emplace(std::make_pair(MOVEMENT_DIRECTION::LEFT, AnimationGroup()));
+		objWalkAnimationGroups.emplace(std::make_pair(MOVEMENT_DIRECTION::RIGHT, AnimationGroup()));
+
+		std::map<MOVEMENT_DIRECTION, AnimationGroup> objIdleAnimationGroups;
+		objIdleAnimationGroups.emplace(std::make_pair(MOVEMENT_DIRECTION::UP, AnimationGroup()));
+		objIdleAnimationGroups.emplace(std::make_pair(MOVEMENT_DIRECTION::DOWN, AnimationGroup()));
+		objIdleAnimationGroups.emplace(std::make_pair(MOVEMENT_DIRECTION::LEFT, AnimationGroup()));
+		objIdleAnimationGroups.emplace(std::make_pair(MOVEMENT_DIRECTION::RIGHT, AnimationGroup()));
+
+		/* Body Animatons */
+		int walkTextureID = TextureManager::AddTexture(BODY_PARTS_ROOT_FOLDER + "body/male_1/walk.png");
+		auto bodyWalkAnimations = AnimationFactory::CreateAnimations(walkTextureID, startFrame, endFrame, animationSpeed, spriteSize);
+		for (auto a : *bodyWalkAnimations)
+		{
+			objWalkAnimationGroups[a.first].AddAnimation(a.second);
+		}
+		auto bodyIdleAnimations = AnimationFactory::CreateAnimations(walkTextureID, 0, 0, 0, spriteSize);
+		for (auto a : *bodyIdleAnimations)
+		{
+			objIdleAnimationGroups[a.first].AddAnimation(a.second);
+		}
+
+		/* Hair Animations */
+		int hairTextureID = TextureManager::AddTexture(BODY_PARTS_ROOT_FOLDER + "hair/blonde/walk.png");
+		auto hairWalkAnimations = AnimationFactory::CreateAnimations(hairTextureID, startFrame, endFrame, animationSpeed, spriteSize);
+		for (auto a : *hairWalkAnimations)
+		{
+			objWalkAnimationGroups[a.first].AddAnimation(a.second);
+		}
+		auto hairIdleAnimations = AnimationFactory::CreateAnimations(hairTextureID, 0, 0, 0, spriteSize);
+		for (auto a : *hairIdleAnimations)
+		{
+			objIdleAnimationGroups[a.first].AddAnimation(a.second);
+		}
+
+		/* Pants Animations */
+		int pantsTextureID = TextureManager::AddTexture(BODY_PARTS_ROOT_FOLDER + "pants/green/walk.png");
+		auto pantsWalkAnimations = AnimationFactory::CreateAnimations(pantsTextureID, startFrame, endFrame, animationSpeed, spriteSize);
+		for (auto a : *pantsWalkAnimations)
+		{
+			objWalkAnimationGroups[a.first].AddAnimation(a.second);
+		}
+		auto pantsIdleAnimations = AnimationFactory::CreateAnimations(pantsTextureID, 0, 0, 0, spriteSize);
+		for (auto a : *pantsIdleAnimations)
+		{
+			objIdleAnimationGroups[a.first].AddAnimation(a.second);
+		}
+
+
+		/* Shirt Animations */
+		int shirtTextureID = TextureManager::AddTexture(BODY_PARTS_ROOT_FOLDER + "shirt/leather_white/walk.png");
+		auto shirtWalkAnimations = AnimationFactory::CreateAnimations(shirtTextureID, startFrame, endFrame, animationSpeed, spriteSize);
+		for (auto a : *shirtWalkAnimations)
+		{
+			objWalkAnimationGroups[a.first].AddAnimation(a.second);
+		}
+		auto shirtIdleAnimations = AnimationFactory::CreateAnimations(shirtTextureID, 0, 0, 0, spriteSize);
+		for (auto a : *shirtIdleAnimations)
+		{
+			objIdleAnimationGroups[a.first].AddAnimation(a.second);
+		}
+
+		/* Shoes Animation */
+		int shoesTextureID = TextureManager::AddTexture(BODY_PARTS_ROOT_FOLDER + "shoes/brown/walk.png");
+		auto shoesWalkAnimations = AnimationFactory::CreateAnimations(shoesTextureID, startFrame, endFrame, animationSpeed, spriteSize);
+		for (auto a : *shoesWalkAnimations)
+		{
+			objWalkAnimationGroups[a.first].AddAnimation(a.second);
+		}
+		auto shoesIdleAnimations = AnimationFactory::CreateAnimations(shoesTextureID, 0, 0, 0, spriteSize);
+		for (auto a : *shoesIdleAnimations)
+		{
+			objIdleAnimationGroups[a.first].AddAnimation(a.second);
+		}
+
+		objSprite->AddAnimation(ANIMATION_STATE::WALK_UP, objWalkAnimationGroups[MOVEMENT_DIRECTION::UP]);
+		objSprite->AddAnimation(ANIMATION_STATE::WALK_LEFT, objWalkAnimationGroups[MOVEMENT_DIRECTION::LEFT]);
+		objSprite->AddAnimation(ANIMATION_STATE::WALK_DOWN, objWalkAnimationGroups[MOVEMENT_DIRECTION::DOWN]);
+		objSprite->AddAnimation(ANIMATION_STATE::WALK_RIGHT, objWalkAnimationGroups[MOVEMENT_DIRECTION::RIGHT]);
+
+		objSprite->AddAnimation(ANIMATION_STATE::IDLE_UP, objIdleAnimationGroups[MOVEMENT_DIRECTION::UP]);
+		objSprite->AddAnimation(ANIMATION_STATE::IDLE_LEFT, objIdleAnimationGroups[MOVEMENT_DIRECTION::LEFT]);
+		objSprite->AddAnimation(ANIMATION_STATE::IDLE_DOWN, objIdleAnimationGroups[MOVEMENT_DIRECTION::DOWN]);
+		objSprite->AddAnimation(ANIMATION_STATE::IDLE_RIGHT, objIdleAnimationGroups[MOVEMENT_DIRECTION::RIGHT]);
+
+		objSprite->SetSortOrder(100);
+
+		follower->m_transform->SetPosition(m_dungeon.GetRandomFloorLocation());
 
 		auto collider2 = follower->AddComponent<C_BoxCollider>();
-		collider2->SetCollidable(sf::FloatRect(objSprite->GetSprite().getGlobalBounds()));
+		collider2->SetCollidable(bodyWalkAnimations->at(MOVEMENT_DIRECTION::DOWN).m_sprite.getGlobalBounds());
 		collider2->SetLayer(CollisionLayer::Followers);
 		collider2->SetTrigger(true);
 
 		follower->AddComponent<C_Velocity>();
 		follower->AddComponent<C_Pathfinding>();
 		follower->AddComponent<C_DirectionalAnimation>();
+		follower->AddComponent<C_Direction>();
 
 		follower->AddComponent<C_Seperation>();
 		follower->AddComponent<C_BehaviorApplier>();
 
 		Object::Add(follower);
 	}
-	*/
+
 
 
 	auto context = m_stateManager->m_context;
@@ -236,7 +347,9 @@ void S_Game::OnCreate()
 	context->m_player = m_player;
 	context->m_pathFinder = &m_pathFinder;
 
+	Raycast::Initialise(context);
 	Debug::Initialise(*context);
+	Input::Initialise();
 }
 
 void S_Game::OnDestroy()
@@ -250,11 +363,13 @@ void S_Game::Deactivate() {}
 
 void S_Game::Update(float deltaTime)
 {
+	Input::EarlyUpdate();
+
 	m_collisions.Resolve();
 
 	Object::UpdateAll(deltaTime);
 
-	if (Input::IsKeyPressed(Input::KEY::KEY_ESC))
+	if (Input::IsKeyDown(Input::KEY::KEY_ESC))
 	{
 		m_stateManager->m_context->m_window->close();
 	}
@@ -286,6 +401,8 @@ void S_Game::LateUpdate(float deltaTime)
 	m_collisions.ProcessNewObjects();
 
 	Object::ProcessNewObjects();
+
+	Input::LateUpdate();
 }
 
 

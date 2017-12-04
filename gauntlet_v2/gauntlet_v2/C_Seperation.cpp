@@ -17,7 +17,7 @@ const sf::Vector2f C_Seperation::GetForce()
 {
 	sf::Vector2f force(0.f, 0.f);
 
-	float sightRadius = 10.f * 10.f;
+	const float sightRadius = 20.f * 20.f;
 
 	for (auto obj : Object::GetObjects())
 	{

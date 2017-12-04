@@ -5,12 +5,6 @@ C_Tag::C_Tag(Object* owner) : Component(owner)
 {
 }
 
-
-C_Tag::~C_Tag()
-{
-}
-
-
 const std::string& C_Tag::Get() const
 {
 	return m_tag;

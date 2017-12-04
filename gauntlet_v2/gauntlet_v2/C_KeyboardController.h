@@ -12,7 +12,8 @@ class C_KeyboardController : public Component, public C_Updateable
 
 public:
 	C_KeyboardController(Object* owner);
-	~C_KeyboardController();
+	
+	void Awake() override;
 
 	void Update(float timeDelta) override;
 

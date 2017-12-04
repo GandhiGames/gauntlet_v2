@@ -8,9 +8,10 @@ public:
 	{
 	}
 
-	virtual ~Component() {}
+	virtual void Awake() {};
+	virtual void Start() {};
 
-public:
+protected:
 	Object* m_owner;
 
 };

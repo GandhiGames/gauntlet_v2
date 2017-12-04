@@ -12,14 +12,17 @@ m_currentTarget({ 0.f, 0.f }),
 m_speed(0),
 m_prevTargetTile(nullptr)
 {
-	m_speed = rand() % 15 + 30;
-
-	m_movement = owner->GetComponent<C_Velocity>();
 }
 
 
-C_Pathfinding::~C_Pathfinding()
+void C_Pathfinding::Awake()
 {
+	m_movement = m_owner->GetComponent<C_Velocity>();
+}
+
+void C_Pathfinding::Start()
+{
+	m_speed = rand() % 30 + 50;
 }
 
 void C_Pathfinding::Update(float deltaTime)
@@ -37,7 +40,7 @@ void C_Pathfinding::Update(float deltaTime)
 	{
 		m_prevTargetTile = curTile;
 
-		if (Mathf::distance(playerPos, pos) < 100.0f)
+		if (Mathf::distance(playerPos, pos) < 400.0f)
 		{
 			DungeonGenerator* level = context.m_level;
 			// Need to find path to player.
@@ -49,7 +52,7 @@ void C_Pathfinding::Update(float deltaTime)
 			else
 			{
 				// If the player is in sight then head directly there.
-				bool foundStraightPath = FindStraightPath(context, pos, playerPos); 
+				bool foundStraightPath = FindStraightPath(pos, playerPos); 
 
 				if (!foundStraightPath)
 				{
@@ -98,9 +101,9 @@ void C_Pathfinding::Update(float deltaTime)
 	}
 }
 
-bool C_Pathfinding::FindStraightPath(SharedContext& context, const sf::Vector2f& from, const sf::Vector2f& to)
+bool C_Pathfinding::FindStraightPath(const sf::Vector2f& from, const sf::Vector2f& to)
 {
-	RaycastResult result = Raycast::Cast(context, from, to);
+	RaycastResult result = Raycast::Cast(from, to);
 
 	if (result.collision)
 	{
@@ -158,7 +161,7 @@ sf::Vector2f* C_Pathfinding::GetNextPosition()
 	return nullptr;
 }
 
-sf::Vector2f* C_Pathfinding::GetNextReactivePosition(SharedContext& context, const sf::Vector2f& pos)
+sf::Vector2f* C_Pathfinding::GetNextReactivePosition(const sf::Vector2f& pos)
 {
 	sf::Vector2f* target = nullptr;
 
@@ -177,7 +180,7 @@ sf::Vector2f* C_Pathfinding::GetNextReactivePosition(SharedContext& context, con
 			{
 				auto v = *itr;
 
-				if (!Raycast::Cast(context, pos, v).collision) //If there is no obstacle between the entity and that position.
+				if (!Raycast::Cast(pos, v).collision) //If there is no obstacle between the entity and that position.
 				{
 				//	Debug::Log("\n Getting Reactive position");
 					target = &v;

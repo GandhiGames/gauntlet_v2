@@ -1,22 +1,19 @@
 #include "Raycast.h"
 #include "SharedContext.h"
 #include "DungeonGenerator.h"
+#include "Object.h"
 
+SharedContext* Raycast::m_context;
 
-Raycast::Raycast()
+void Raycast::Initialise(SharedContext* context)
 {
+	m_context = context;
 }
-
-
-Raycast::~Raycast()
-{
-}
-
 
 //TODO: increment step to tile size?
 std::vector<sf::Vector2f> Raycast::BresenhamLine(const sf::Vector2f& from, const sf::Vector2f& to)
 {
-	// Optimization: it would be preferable to calculate in
+	// TODO: it would be preferable to calculate in
 	// advance the size of "result" and to use a fixed-size array
 	// instead of a list.
 	std::vector<sf::Vector2f> result;
@@ -117,8 +114,30 @@ std::vector<sf::Vector2f> Raycast::BresenhamLine(const sf::Vector2f& from, const
 	*/
 }
 
+
+std::vector<std::shared_ptr<Object>> Raycast::CircleCast(const sf::Vector2f& pos, float radius, const std::string& tag)
+{
+	auto entities = Object::GetObjectsWithTag(tag);
+
+	std::vector<std::shared_ptr<Object>> localObjects;
+
+	const float to = radius * radius;
+
+	for (auto& obj : entities)
+	{
+		float distance = Mathf::distanceSqr(pos, obj->m_transform->GetPosition());
+
+		if (distance < radius)
+		{
+			localObjects.push_back(obj);
+		}
+	}
+
+	return localObjects;
+}
+
 // Raycast using Bresenham algorithm 
-RaycastResult Raycast::Cast(SharedContext& context, const sf::Vector2f& from, const sf::Vector2f& to)
+RaycastResult Raycast::Cast(const sf::Vector2f& from, const sf::Vector2f& to)
 {
 	RaycastResult result;
 	result.collision = false;
@@ -128,10 +147,6 @@ RaycastResult Raycast::Cast(SharedContext& context, const sf::Vector2f& from, co
 	// Exit the function now if the ray length is 0
 	if (from == to) 
 	{
-		//context.m_level->IsSolid((int)position.x, (int)position.y);
-		//result.DoCollide = IsPointTraversable((int)position.X, (int)position.Y);
-		//result.Position = position;
-		
 		return result;
 	}
 	
@@ -152,13 +167,14 @@ RaycastResult Raycast::Cast(SharedContext& context, const sf::Vector2f& from, co
 		{
 			sf::Vector2f& rayPoint = rayLine[rayPointIndex];
 	
-			if (context.m_level->IsSolid(rayPoint)) 
+			//auto tile = m_context->m_level->GetNodes().GetTile(rayPoint);
+
+			//Debug::DrawRect(m_context->m_level->GetTilePosition(tile->x, tile->y), sf::Vector2f(DUNGEON_TILE_SIZE, DUNGEON_TILE_SIZE));
+
+			if (m_context->m_level->IsSolid(rayPoint)) 
 			{
 				result.collision = true;
 				return result;
-				//result.Position = Vector.FromPoint(rayPoint);
-				//result.DoCollide = true;
-				//break;
 			}
 			
 			if (rayLine[0] != from) 

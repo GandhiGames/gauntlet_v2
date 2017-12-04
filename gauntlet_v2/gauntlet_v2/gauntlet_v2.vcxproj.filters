@@ -168,9 +168,6 @@
     <ClInclude Include="Raycast.h">
       <Filter>Header Files\Raycast</Filter>
     </ClInclude>
-    <ClInclude Include="RaycastResult.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
     <ClInclude Include="C_RaycastTest.h">
       <Filter>Header Files\Components\Test</Filter>
     </ClInclude>
@@ -201,9 +198,6 @@
     <ClInclude Include="DungeonGenerator.h">
       <Filter>Header Files\Level Generation</Filter>
     </ClInclude>
-    <ClInclude Include="DungeonClusters.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="NodeList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -217,6 +211,21 @@
       <Filter>Header Files\Animation</Filter>
     </ClInclude>
     <ClInclude Include="AnimationGroup.h">
+      <Filter>Header Files\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationFactory.h">
+      <Filter>Header Files\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="DungeonClusters.h">
+      <Filter>Header Files\Level Generation</Filter>
+    </ClInclude>
+    <ClInclude Include="C_MeleeAttack.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="RaycastResult.h">
+      <Filter>Header Files\Raycast</Filter>
+    </ClInclude>
+    <ClInclude Include="C_Direction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -342,6 +351,15 @@
       <Filter>Source Files\Animation</Filter>
     </ClCompile>
     <ClCompile Include="AnimationGroup.cpp">
+      <Filter>Source Files\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationFactory.cpp">
+      <Filter>Source Files\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="C_MeleeAttack.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="C_Direction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

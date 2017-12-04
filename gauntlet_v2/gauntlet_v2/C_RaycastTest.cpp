@@ -3,15 +3,16 @@
 
 C_RaycastTest::C_RaycastTest(Object* owner) : Component(owner)
 {
-	toOffset = sf::Vector2f(rand() % 100 + (-50), rand() % 100 + (-50));
+	//toOffset = sf::Vector2f(rand() % 100 + (-50), rand() % 100 + (-50));
+	m_toOffset = sf::Vector2f(0.f, -50.f);
 }
 
 void C_RaycastTest::Update(float deltaTime)
 {
 	auto from = m_owner->m_transform->GetPosition();
-	auto to = from + toOffset; // sf::Vector2f(0.f, -52.f);
+	auto to = from + m_toOffset; 
 
-	RaycastResult hit = Raycast::Cast(m_owner->m_context, from, to);
+	RaycastResult hit = Raycast::Cast(from, to);
 
 	if (hit.collision)
 	{

@@ -11,20 +11,22 @@ class C_Pathfinding : public Component, public C_Updateable
 
 public:
 	C_Pathfinding(Object* owner);
-	~C_Pathfinding();
+	
+	void Awake() override;
+	void Start() override;
 
 	void Update(float deltaTime) override;
 
 private:
 	sf::Vector2f* GetNextPosition();
 
-	sf::Vector2f* GetNextReactivePosition(SharedContext& context, const sf::Vector2f& pos);
+	sf::Vector2f* GetNextReactivePosition(const sf::Vector2f& pos);
 
 	void RemoveFirst();
 
 	bool FindLocalPath(const sf::Vector2f& pos, const sf::Vector2f& playerPos);
 
-	bool FindStraightPath(SharedContext& context, const sf::Vector2f& from, const sf::Vector2f& to);
+	bool FindStraightPath(const sf::Vector2f& from, const sf::Vector2f& to);
 
 	/**
 	* The target position of the enemy.

@@ -16,7 +16,8 @@ std::vector<std::shared_ptr<Object>> C_MovementBehavior::GetEntitiesInSight(floa
 {
 	auto entities = Object::GetObjectsWithTag(tag);
 
-	float radius = sightRadius * sightRadius;
+	const float radius = sightRadius * sightRadius;
+	const sf::Vector2f& pos = m_owner->m_transform->GetPosition();
 
 	std::vector<std::shared_ptr<Object>> retVals;
 
@@ -24,7 +25,7 @@ std::vector<std::shared_ptr<Object>> C_MovementBehavior::GetEntitiesInSight(floa
 	{
 		if (obj->m_instanceID->Get() != m_owner->m_instanceID->Get()) 
 		{
-			float to = Mathf::sqrMagnitude(obj->m_transform->GetPosition() - m_owner->m_transform->GetPosition());
+			float to = Mathf::distanceSqr(obj->m_transform->GetPosition(), pos);
 
 			if (to < radius) 
 			{

@@ -35,6 +35,10 @@ enum ANIMATION_STATE
 	IDLE_DOWN,
 	IDLE_RIGHT,
 	IDLE_LEFT,
+	SWING_UP,
+	SWING_DOWN,
+	SWING_RIGHT,
+	SWING_LEFT,
 	COUNT
 };
 
@@ -49,6 +53,7 @@ enum MOVEMENT_DIRECTION
 const std::string PLAYER_TAG = "Player";
 const std::string FOLLOWER_TAG = "Follower";
 
+const std::string BODY_PARTS_ROOT_FOLDER = "../resources/characters/body_parts/";
 
 //TODO: move to own header
 class Mathf
@@ -100,6 +105,11 @@ public:
 	static float distance(const sf::Vector2f& a, const sf::Vector2f& b)
 	{
 		return (abs(sqrt(((a.x - b.x) * (a.x - b.x)) + ((a.y - b.y) * (a.y - b.y)))));
+	}
+
+	static float distanceSqr(const sf::Vector2f& a, const sf::Vector2f& b)
+	{
+		return abs((a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y));
 	}
 
 	static void truncate(sf::Vector2f& v, float max)

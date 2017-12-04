@@ -13,6 +13,7 @@
 #include "PathFinder.h"
 #include "Debug.h"
 #include "DungeonGenerator.h"
+#include "AnimationFactory.h"
 
 class S_Game : public Scene
 {

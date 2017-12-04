@@ -25,27 +25,17 @@ void C_Velocity::Set(sf::Vector2f& velocity)
 		DungeonGenerator* level = m_owner->m_context.m_level;
 		auto pos = m_owner->m_transform->GetPosition();
 
-		/*
-		if (level->CausesCollision(pos))
-		{
-
-		}
-		*/
 		// Calculate horizontal movement.
-
 		if (level->CausesCollision(sf::Vector2f(pos.x + velocity.x, pos.y)))
 		{
 			velocity.x = 0.f;
 		}
 
-
-		// Calculate horizontal movement.
-
+		// Calculate horizontal movement
 		if (level->CausesCollision(sf::Vector2f(pos.x, pos.y + velocity.y)))
 		{
 			velocity.y = 0.f;
 		}
-
 
 		m_velocity = velocity;
 	}

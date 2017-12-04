@@ -20,11 +20,17 @@ public:
 		KEY_RETURN
 	};
 
-	/**
-	* Checks if a given key is currently pressed.
-	* @param keycode The key to check.
-	* @return True if the given key is currently pressed.
-	*/
-	static bool IsKeyPressed(KEY keycode);
+	static void Initialise();
+
+	static void EarlyUpdate();
+	static void LateUpdate();
+
+	static bool IsKeyDown(KEY keycode);
+	static bool IsKeyUp(KEY keycode);
+
+private:
+	static void SetPressedKeys();
+	static std::map<KEY, bool> m_thisFrame;
+	static std::map<KEY, bool> m_lastFrame;
 };
 

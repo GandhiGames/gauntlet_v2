@@ -34,11 +34,11 @@ void S_Paused::Deactivate()
 
 void S_Paused::Update(float deltaTime)
 {
-	if (Input::IsKeyPressed(Input::KEY::KEY_ESC))
+	if (Input::IsKeyDown(Input::KEY::KEY_ESC))
 	{
 		m_stateManager->SwitchTo(StateType::Game);
 	}
-	else if (Input::IsKeyPressed(Input::KEY::KEY_RETURN))
+	else if (Input::IsKeyDown(Input::KEY::KEY_RETURN))
 	{
 		m_stateManager->m_context->m_window->close();
 	}

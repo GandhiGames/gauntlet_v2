@@ -1,7 +1,5 @@
 #pragma once
 
-#include <assert.h>
-
 #include "C_Drawable.h"
 #include "C_Updateable.h"
 #include "C_Transform.h"

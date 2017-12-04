@@ -12,8 +12,8 @@ class C_BehaviorApplier : public Component, public C_Updateable
 {
 public:
 	C_BehaviorApplier(Object* owner);
-	~C_BehaviorApplier();
 
+	void Awake() override;
 	void Update(float deltaTime) override;
 
 private:

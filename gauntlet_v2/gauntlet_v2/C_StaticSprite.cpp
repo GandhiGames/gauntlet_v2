@@ -4,11 +4,6 @@
 //TODO: shouldn't need to set unique on both drawable and updateable
 C_StaticSprite::C_StaticSprite(Object* owner) : Component(owner)
 {
-	assert(owner->GetComponents<C_Drawable>().size() == 0);
-}
-
-C_StaticSprite::~C_StaticSprite()
-{
 }
 
 void C_StaticSprite::Update(float deltaTime)

@@ -3,13 +3,12 @@
 
 C_BehaviorApplier::C_BehaviorApplier(Object* owner) : Component(owner)
 {
-	m_behaviors = m_owner->GetComponents<C_MovementBehavior>();
-	m_movement = m_owner->GetComponent<C_Velocity>();
 }
 
-
-C_BehaviorApplier::~C_BehaviorApplier()
+void C_BehaviorApplier::Awake()
 {
+	m_behaviors = m_owner->GetComponents<C_MovementBehavior>();
+	m_movement = m_owner->GetComponent<C_Velocity>();
 }
 
 void C_BehaviorApplier::Update(float deltaTime)

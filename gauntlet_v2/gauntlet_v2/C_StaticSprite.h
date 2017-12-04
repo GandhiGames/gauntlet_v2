@@ -9,8 +9,7 @@ class C_StaticSprite : public Component, public C_Drawable, public C_Updateable
 {
 public:
 	C_StaticSprite(Object* owner);
-	~C_StaticSprite();
-
+	
 	void Update(float deltaTime) override;
 
 	/**
