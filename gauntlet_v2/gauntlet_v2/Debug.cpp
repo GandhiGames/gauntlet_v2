@@ -94,7 +94,7 @@ void Debug::DrawRect(const sf::Vector2f& pos, const sf::Vector2f size, sf::Color
 void Debug::Log(const sf::Vector2f& v)
 {
 	char result[100];
-	sprintf_s(result, "\n{%d, %d}", v.x, v.y);
+	sprintf_s(result, "\n{%f, %f}", v.x, v.y);
 	printf(result);
 }
 

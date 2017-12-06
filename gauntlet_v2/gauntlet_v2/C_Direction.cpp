@@ -1,6 +1,6 @@
 #include "C_Direction.h"
 #include "Object.h"
-
+#include "Debug.h"
 
 C_Direction::C_Direction(Object* owner) : Component(owner), m_moveDir(MOVEMENT_DIRECTION::DOWN)
 {

@@ -2,7 +2,8 @@
 #include "Object.h"
 #include "Debug.h"
 
-C_MeleeAttack::C_MeleeAttack(Object * owner) : Component(owner)
+C_MeleeAttack::C_MeleeAttack(Object * owner) : Component(owner), 
+hitDistance(10.f), hitRadius(20.f), dmgAmount(1)
 {
 }
 
@@ -14,31 +15,54 @@ void C_MeleeAttack::Awake()
 
 void C_MeleeAttack::Start()
 {
-	m_attackDirections.insert(std::make_pair(MOVEMENT_DIRECTION::LEFT, ANIMATION_STATE::SWING_LEFT));
-	m_attackDirections.insert(std::make_pair(MOVEMENT_DIRECTION::DOWN, ANIMATION_STATE::SWING_DOWN));
-	m_attackDirections.insert(std::make_pair(MOVEMENT_DIRECTION::RIGHT, ANIMATION_STATE::SWING_RIGHT));
-	m_attackDirections.insert(std::make_pair(MOVEMENT_DIRECTION::UP, ANIMATION_STATE::SWING_UP));
+	m_hitDirections.insert(std::make_pair(MOVEMENT_DIRECTION::LEFT, sf::Vector2f(-hitDistance, 0.f)));
+	m_hitDirections.insert(std::make_pair(MOVEMENT_DIRECTION::RIGHT, sf::Vector2f(hitDistance, 0.f)));
+	m_hitDirections.insert(std::make_pair(MOVEMENT_DIRECTION::DOWN, sf::Vector2f(0.f, hitDistance)));
+	m_hitDirections.insert(std::make_pair(MOVEMENT_DIRECTION::UP, sf::Vector2f(0.f, -hitDistance)));
+
+	auto animation = m_owner->GetComponent<C_AnimatedSprite>();
+
+	if (animation)
+	{
+		std::shared_ptr<AnimationGroup> swingAnimation = animation->GetAnimation(ANIMATION_STATE::SWING);
+
+		if (swingAnimation)
+		{
+			auto animations = swingAnimation->GetAnimations(SPRITE_TYPE::SWORD);
+
+			for(auto& a : animations)
+			{
+				a->SetFrameAction(3, std::bind(&C_MeleeAttack::DoMeleeAttack, this));
+			}
+		}
+	}
 }
 
 void C_MeleeAttack::Update(float deltaTime)
 {
-	if (Input::IsKeyUp(Input::KEY::KEY_ATTACK))
+	if (Input::IsKeyDown(Input::KEY::KEY_ATTACK))
 	{
-		const MOVEMENT_DIRECTION moveDir = m_moveDir->Get();
+		m_animation->SetCurrentAnimation(ANIMATION_STATE::SWING);		
+	}
+}
 
-		auto anim = m_attackDirections.find(moveDir);
+void C_MeleeAttack::DoMeleeAttack()
+{
+	const MOVEMENT_DIRECTION moveDir = m_moveDir->Get();
+	const sf::Vector2f& pos = m_owner->m_transform->GetPosition();
+	auto inRange = Raycast::CircleCast(pos + m_hitDirections.at(moveDir), hitRadius, FOLLOWER_TAG);
 
-		if (anim != m_attackDirections.end())
+	for (auto i : inRange)
+	{
+		const sf::Vector2f& heading = i->m_transform->GetPosition() - pos;
+		const float distance = Mathf::magnitude(heading);
+		const sf::Vector2f& dir = heading / distance;
+
+		auto damageables = i->GetComponents<C_Damageable>();
+
+		for (auto& d : damageables)
 		{
-			m_animation->SetCurrentAnimation(anim->second);
-		}
-
-		const sf::Vector2f& pos = m_owner->m_transform->GetPosition();
-		auto inRange = Raycast::CircleCast(pos, 10.f, FOLLOWER_TAG);
-
-		for (auto i : inRange)
-		{
-			i->Destroy();
+			d->DoDamage(dir, dmgAmount);
 		}
 	}
 }

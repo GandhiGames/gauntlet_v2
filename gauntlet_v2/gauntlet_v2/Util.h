@@ -3,7 +3,7 @@
 #include <string>
 #include <SFML\Graphics.hpp>
 
-enum DungeonTileType
+enum class DungeonTileType
 {
 	Invalid = -1,
 	Wall,
@@ -25,29 +25,33 @@ enum DungeonTileType
 	Max
 };
 
-enum ANIMATION_STATE 
+enum class ANIMATION_STATE 
 {
-	WALK_UP,
-	WALK_DOWN,
-	WALK_RIGHT,
-	WALK_LEFT,
-	IDLE_UP,
-	IDLE_DOWN,
-	IDLE_RIGHT,
-	IDLE_LEFT,
-	SWING_UP,
-	SWING_DOWN,
-	SWING_RIGHT,
-	SWING_LEFT,
+	WALK,
+	IDLE,
+	SWING,
 	COUNT
 };
 
-enum MOVEMENT_DIRECTION
+enum class MOVEMENT_DIRECTION
 {
 	LEFT,
 	DOWN,
 	RIGHT,
-	UP
+	UP,
+	COUNT
+};
+
+enum class SPRITE_TYPE
+{
+	BODY,
+	SHIRT,
+	HAIR,
+	PANTS,
+	SHOES,
+	SWORD,
+	BOW,
+	COUNT
 };
 
 const std::string PLAYER_TAG = "Player";

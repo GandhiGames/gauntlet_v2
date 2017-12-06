@@ -79,6 +79,12 @@
     <Filter Include="Header Files\Animation">
       <UniqueIdentifier>{2252f694-5d8e-472e-a580-b48671915718}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Events">
+      <UniqueIdentifier>{23fd7d0a-484b-4ebd-9bff-1099d7aa66f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Events">
+      <UniqueIdentifier>{bf2b2dcf-7a8b-494c-b78e-17047147158c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object.h">
@@ -198,9 +204,6 @@
     <ClInclude Include="DungeonGenerator.h">
       <Filter>Header Files\Level Generation</Filter>
     </ClInclude>
-    <ClInclude Include="NodeList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Debug.h">
       <Filter>Header Files\Debug</Filter>
     </ClInclude>
@@ -226,7 +229,19 @@
       <Filter>Header Files\Raycast</Filter>
     </ClInclude>
     <ClInclude Include="C_Direction.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="NodeList.h">
+      <Filter>Header Files\Level Generation</Filter>
+    </ClInclude>
+    <ClInclude Include="C_Damageable.h">
+      <Filter>Header Files\Components\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="C_Health.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="C_KnockBack.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -335,12 +350,6 @@
     <ClCompile Include="DungeonGenerator.cpp">
       <Filter>Source Files\Level Generation</Filter>
     </ClCompile>
-    <ClCompile Include="DungeonClusters.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NodeList.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Debug.cpp">
       <Filter>Source Files\Debug</Filter>
     </ClCompile>
@@ -360,7 +369,19 @@
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="C_Direction.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="DungeonClusters.cpp">
+      <Filter>Source Files\Level Generation</Filter>
+    </ClCompile>
+    <ClCompile Include="NodeList.cpp">
+      <Filter>Source Files\Level Generation</Filter>
+    </ClCompile>
+    <ClCompile Include="C_Health.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="C_KnockBack.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -16,20 +16,20 @@ void C_KeyboardController::Update(float timeDelta)
 	// Calculate movement speed based on the timeDelta since the last update.
 	sf::Vector2f movementSpeed(0.f, 0.f);
 
-	if (Input::IsKeyDown(Input::KEY::KEY_LEFT))
+	if (Input::IsKeyPressed(Input::KEY::KEY_LEFT))
 	{
 		movementSpeed.x = -m_speed * timeDelta;;
 	}
-	else if (Input::IsKeyDown(Input::KEY::KEY_RIGHT))
+	else if (Input::IsKeyPressed(Input::KEY::KEY_RIGHT))
 	{
 		movementSpeed.x = m_speed * timeDelta;;
 	}
 
-	if (Input::IsKeyDown(Input::KEY::KEY_UP))
+	if (Input::IsKeyPressed(Input::KEY::KEY_UP))
 	{
 		movementSpeed.y = -m_speed * timeDelta;;
 	}
-	else if (Input::IsKeyDown(Input::KEY::KEY_DOWN))
+	else if (Input::IsKeyPressed(Input::KEY::KEY_DOWN))
 	{
 		movementSpeed.y = m_speed * timeDelta;;
 	}

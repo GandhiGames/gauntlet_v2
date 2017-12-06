@@ -26,6 +26,9 @@
 #include "C_BehaviorApplier.h"
 #include "C_DebugPositionLabel.h"
 #include "C_MeleeAttack.h"
+#include "C_Damageable.h"
+#include "C_Health.h"
+#include "C_KnockBack.h"
 
 class Object
 {

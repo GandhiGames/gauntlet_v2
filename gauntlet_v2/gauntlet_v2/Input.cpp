@@ -27,6 +27,21 @@ void Input::LateUpdate()
 
 bool Input::IsKeyDown(KEY keycode)
 {
+	if (!IsKeyPressed(keycode))
+	{
+		return false;
+	}
+
+	auto key = m_lastFrame.find(keycode);
+
+	if (key != m_lastFrame.end())
+	{
+		return !key->second;
+	}
+}
+
+bool Input::IsKeyPressed(KEY keycode)
+{
 	auto key = m_thisFrame.find(keycode);
 
 	if (key != m_thisFrame.end())
@@ -39,7 +54,7 @@ bool Input::IsKeyDown(KEY keycode)
 
 bool Input::IsKeyUp(KEY keycode)
 {
-	if (IsKeyDown(keycode))
+	if (IsKeyPressed(keycode))
 	{
 		return false;
 	}

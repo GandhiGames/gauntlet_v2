@@ -144,12 +144,15 @@
     <ClInclude Include="C_Collidable.h" />
     <ClInclude Include="C_CollidableTest.h" />
     <ClInclude Include="C_Collider2D.h" />
+    <ClInclude Include="C_Damageable.h" />
     <ClInclude Include="C_DebugPositionLabel.h" />
     <ClInclude Include="C_Direction.h" />
     <ClInclude Include="C_DirectionalAnimation.h" />
     <ClInclude Include="C_Drawable.h" />
+    <ClInclude Include="C_Health.h" />
     <ClInclude Include="C_InstanceID.h" />
     <ClInclude Include="C_KeyboardController.h" />
+    <ClInclude Include="C_KnockBack.h" />
     <ClInclude Include="C_MeleeAttack.h" />
     <ClInclude Include="C_Velocity.h" />
     <ClInclude Include="C_MovementBehavior.h" />
@@ -197,8 +200,10 @@
     <ClCompile Include="C_Direction.cpp" />
     <ClCompile Include="C_DirectionalAnimation.cpp" />
     <ClCompile Include="C_Drawable.cpp" />
+    <ClCompile Include="C_Health.cpp" />
     <ClCompile Include="C_InstanceID.cpp" />
     <ClCompile Include="C_KeyboardController.cpp" />
+    <ClCompile Include="C_KnockBack.cpp" />
     <ClCompile Include="C_MeleeAttack.cpp" />
     <ClCompile Include="C_Velocity.cpp" />
     <ClCompile Include="C_MovementBehavior.cpp" />

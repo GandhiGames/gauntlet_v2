@@ -117,7 +117,7 @@ std::vector<sf::Vector2f> Raycast::BresenhamLine(const sf::Vector2f& from, const
 
 std::vector<std::shared_ptr<Object>> Raycast::CircleCast(const sf::Vector2f& pos, float radius, const std::string& tag)
 {
-	auto entities = Object::GetObjectsWithTag(tag);
+	auto entities = Object::GetObjects();
 
 	std::vector<std::shared_ptr<Object>> localObjects;
 
@@ -125,11 +125,14 @@ std::vector<std::shared_ptr<Object>> Raycast::CircleCast(const sf::Vector2f& pos
 
 	for (auto& obj : entities)
 	{
-		float distance = Mathf::distanceSqr(pos, obj->m_transform->GetPosition());
-
-		if (distance < radius)
+		if (obj->m_tag->Get() == tag)
 		{
-			localObjects.push_back(obj);
+			float distance = Mathf::distanceSqr(pos, obj->m_transform->GetPosition());
+
+			if (distance < to)
+			{
+				localObjects.emplace_back(obj);
+			}
 		}
 	}
 

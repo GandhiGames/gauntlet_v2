@@ -25,6 +25,7 @@ public:
 	static void EarlyUpdate();
 	static void LateUpdate();
 
+	static bool IsKeyPressed(KEY keycode);
 	static bool IsKeyDown(KEY keycode);
 	static bool IsKeyUp(KEY keycode);
 

@@ -20,7 +20,6 @@ public:
 	C_DirectionalAnimation(Object* owner);
 
 	void Awake() override;
-	void Start() override;
 
 	void Update(float timeDelta) override;
 
@@ -31,8 +30,5 @@ private:
 	std::shared_ptr<C_Direction> m_direction;
 
 	ANIMATION_STATE m_currentState;
-
-	std::map<MOVEMENT_DIRECTION, ANIMATION_STATE> m_moveDirections;
-	std::map<MOVEMENT_DIRECTION, ANIMATION_STATE> m_idleDirections;
 };
 

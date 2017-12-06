@@ -2,18 +2,28 @@
 #include "Object.h"
 
 C_AnimatedSprite::C_AnimatedSprite(Object* owner) : Component(owner),
-m_animated(false)
+m_animated(false), m_curDirection(MOVEMENT_DIRECTION::COUNT)
 {
 }
 
-C_AnimatedSprite::~C_AnimatedSprite()
+void C_AnimatedSprite::Awake()
 {
+	m_direction = m_owner->GetComponent<C_Direction>();
 }
 
 void C_AnimatedSprite::LateUpdate(float deltaTime)
 {
 	if (m_curAnimation)
 	{
+		MOVEMENT_DIRECTION curDir = m_direction->Get();
+
+		if (curDir != m_curDirection)
+		{
+			m_curDirection = curDir;
+			m_curAnimation->SetDirection(curDir);
+			m_curAnimation->Reset();
+		}
+
 		m_curAnimation->Update(m_owner->m_transform->GetPosition());
 	}
 }
@@ -45,8 +55,20 @@ void C_AnimatedSprite::SetCurrentAnimation(ANIMATION_STATE state)
 	if (animation != m_animations.end())
 	{
 		m_curAnimation = animation->second;
+		m_curAnimation->SetDirection(m_curDirection);
 		m_curAnimation->Reset();
 	}
+}
+
+std::shared_ptr<AnimationGroup> C_AnimatedSprite::GetAnimation(ANIMATION_STATE state)
+{
+	auto animation = m_animations.find(state);
+	if (animation != m_animations.end())
+	{
+		return animation->second;
+	}
+
+	return nullptr;
 }
 
 void C_AnimatedSprite::SetAnimated(bool animated)
