@@ -166,6 +166,7 @@
     <ClInclude Include="Debug.h" />
     <ClInclude Include="DungeonClusters.h" />
     <ClInclude Include="DungeonGenerator.h" />
+    <ClInclude Include="FPS.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Level.h" />
@@ -217,6 +218,7 @@
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="DungeonClusters.cpp" />
     <ClCompile Include="DungeonGenerator.cpp" />
+    <ClCompile Include="FPS.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Level.cpp" />

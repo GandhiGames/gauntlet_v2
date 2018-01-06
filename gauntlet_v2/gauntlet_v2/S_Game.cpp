@@ -178,8 +178,8 @@ void S_Game::OnCreate()
 		//m_player->AddComponent<C_CollidableTest>();
 		m_player->AddComponent<C_RaycastTest>();
 
-		m_view.setCenter(m_player->m_transform->GetPosition());
-		//m_player->AddComponent<C_Camera>();
+		//m_view.setCenter(m_player->m_transform->GetPosition());
+		m_player->AddComponent<C_Camera>();
 		m_player->AddComponent<C_MeleeAttack>();
 		m_player->AddComponent<C_Direction>();
 
@@ -192,7 +192,7 @@ void S_Game::OnCreate()
 	/*******************
 	 Player setup end.
 	********************/
-	/*
+
 	for (int i = 0; i < 10; ++i)
 	{
 		auto follower = std::make_shared<Object>(*m_stateManager->m_context);
@@ -332,7 +332,6 @@ void S_Game::OnCreate()
 
 		Object::Add(follower);
 	}
-	*/
 
 	auto context = m_stateManager->m_context;
 	context->m_level = &m_dungeon;
@@ -376,6 +375,8 @@ void S_Game::Draw(float deltaTime)
 	Object::DrawAll(*window, deltaTime);
 
 	Debug::Draw(*window);
+
+	m_fps.Draw(*window, deltaTime);
 }
 
 void S_Game::LateUpdate(float deltaTime)

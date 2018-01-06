@@ -82,6 +82,8 @@ void CollisionResolver::ProcessNewObjects()
 	}
 }
 
+//TODO: create spatial position data structure. No need to check every collidable with every other collidable
+//https://gamedevelopment.tutsplus.com/tutorials/quick-tip-use-quadtrees-to-detect-likely-collisions-in-2d-space--gamedev-374
 void CollisionResolver::Resolve()
 {
 	ProcessCollisionExits();

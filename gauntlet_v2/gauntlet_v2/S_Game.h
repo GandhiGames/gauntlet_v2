@@ -14,6 +14,7 @@
 #include "Debug.h"
 #include "DungeonGenerator.h"
 #include "AnimationFactory.h"
+#include "FPS.h"
 
 class S_Game : public Scene
 {
@@ -36,5 +37,6 @@ private:
 	std::shared_ptr<Object> m_player;
 	PathFinder m_pathFinder;
 	DungeonGenerator m_dungeon;
+	FPS m_fps;
 };
 

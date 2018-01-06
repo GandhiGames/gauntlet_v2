@@ -18,9 +18,9 @@ void NodeList::Draw(sf::RenderWindow &window, float timeDelta)
 	for (int i = 0; i < length; i++)
 	{
 		//TODO: profile culling over drawing all.
-		//if (!window.getDefaultView().getViewport().intersects(m_grid[i][j].sprite.getGlobalBounds()))
+		//if (!window.getDefaultView().getViewport().intersects(m_grid[i].sprite.getGlobalBounds()))
 		//{
-		window.draw(m_grid.at(i).sprite);
+			window.draw(m_grid.at(i).sprite);
 		//}
 	}
 }
@@ -65,7 +65,7 @@ DungeonTile* NodeList::GetTile(const sf::Vector2f& position)
 
 	int tx = floor((position.x - m_offset.x) / DUNGEON_TILE_SIZE);
 	int ty = floor((position.y - m_offset.y) / DUNGEON_TILE_SIZE);
-		
+
 
 	return GetTile(tx, ty);
 }

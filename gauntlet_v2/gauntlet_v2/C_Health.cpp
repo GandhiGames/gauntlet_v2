@@ -2,7 +2,7 @@
 #include "Object.h"
 
 
-C_Health::C_Health(Object* owner) : Component(owner), currentHealth(20)
+C_Health::C_Health(Object* owner) : Component(owner), currentHealth(5)
 {
 }
 

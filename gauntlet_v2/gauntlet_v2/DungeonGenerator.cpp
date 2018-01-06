@@ -126,7 +126,7 @@ bool DungeonGenerator::CausesCollision(const sf::Vector2f& newPosition)
 	DungeonTile* overlappingTiles[4];
 
 	//TODO: calculate on a per sprite basis.
-	const float characterSize = 16.f;
+	const float characterSize = 14.f;
 
 	sf::Vector2f pos = newPosition;
 	pos.x -= characterSize;

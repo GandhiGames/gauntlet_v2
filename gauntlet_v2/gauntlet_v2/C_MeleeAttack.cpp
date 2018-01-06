@@ -2,7 +2,7 @@
 #include "Object.h"
 #include "Debug.h"
 
-C_MeleeAttack::C_MeleeAttack(Object * owner) : Component(owner), 
+C_MeleeAttack::C_MeleeAttack(Object * owner) : Component(owner),
 hitDistance(10.f), hitRadius(20.f), dmgAmount(1)
 {
 }
@@ -20,29 +20,26 @@ void C_MeleeAttack::Start()
 	m_hitDirections.insert(std::make_pair(MOVEMENT_DIRECTION::DOWN, sf::Vector2f(0.f, hitDistance)));
 	m_hitDirections.insert(std::make_pair(MOVEMENT_DIRECTION::UP, sf::Vector2f(0.f, -hitDistance)));
 
-	auto animation = m_owner->GetComponent<C_AnimatedSprite>();
 
-	if (animation)
+	std::shared_ptr<AnimationGroup> swingAnimation = m_animation->GetAnimation(ANIMATION_STATE::SWING);
+
+	if (swingAnimation)
 	{
-		std::shared_ptr<AnimationGroup> swingAnimation = animation->GetAnimation(ANIMATION_STATE::SWING);
+		auto animations = swingAnimation->GetAnimations(SPRITE_TYPE::SWORD);
 
-		if (swingAnimation)
+		for (auto& a : animations)
 		{
-			auto animations = swingAnimation->GetAnimations(SPRITE_TYPE::SWORD);
-
-			for(auto& a : animations)
-			{
-				a->SetFrameAction(3, std::bind(&C_MeleeAttack::DoMeleeAttack, this));
-			}
+			a->SetFrameAction(3, std::bind(&C_MeleeAttack::DoMeleeAttack, this));
 		}
 	}
+
 }
 
 void C_MeleeAttack::Update(float deltaTime)
 {
 	if (Input::IsKeyDown(Input::KEY::KEY_ATTACK))
 	{
-		m_animation->SetCurrentAnimation(ANIMATION_STATE::SWING);		
+		m_animation->SetCurrentAnimation(ANIMATION_STATE::SWING);
 	}
 }
 

@@ -243,6 +243,9 @@
     <ClInclude Include="C_KnockBack.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
+    <ClInclude Include="FPS.h">
+      <Filter>Header Files\Debug</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Object.cpp">
@@ -382,6 +385,9 @@
     </ClCompile>
     <ClCompile Include="C_KnockBack.cpp">
       <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="FPS.cpp">
+      <Filter>Source Files\Debug</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

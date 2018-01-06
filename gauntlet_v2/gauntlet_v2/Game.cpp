@@ -9,7 +9,7 @@ m_isRunning(true), m_stateManager(&m_context)
 	//srand(static_cast<unsigned int>(time(nullptr)));
 	m_window.setVerticalSyncEnabled(true);
 	m_window.setMouseCursorVisible(false);
-	m_window.setFramerateLimit(60);
+	m_window.setFramerateLimit(120);
 
 	m_elapsed = m_clock.restart().asSeconds();
 
